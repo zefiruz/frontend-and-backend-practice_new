@@ -2,20 +2,10 @@
 
 Веб-сайт портфолио в стиле 2000-х годов.
 
-## Структура проекта
+## Ссылка на GitHub Pages
 
-- `index.html` - главная страница
-- `pages/` - дополнительные страницы
-- `styles/` - CSS стили
-- `images/` - изображения
-- `assets/` - дополнительные файлы
-
-## Технологии
-
-- HTML5
-- CSS3
-- JavaScript
+https://zefiruz.github.io/frontend-and-backend-practice_new/
 
 ## Автор
 
-Малямов Семён
+Малямов Семён ЭФБО-02-24
