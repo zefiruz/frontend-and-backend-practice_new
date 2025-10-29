@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Проекты - Портфолио студента</title>
     <link rel="stylesheet" href="../styles/styles.css">
+    <style>
+        /* Фикс для фона чтобы не мигал при скролле */
+        body {
+            background-attachment: fixed;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -21,6 +27,11 @@
                     <li><a href="projects.html" class="active">Проекты</a></li>
                     <li><a href="diary.html">Дневник</a></li>
                     <li><a href="contacts.html">Контакты</a></li>
+                    <li>
+                        <button onclick="toggleTheme()" class="theme-btn" title="Переключить тему">
+                            🌙 Тема
+                        </button>
+                    </li>
                 </ul>
             </nav>
         </header>
@@ -37,30 +48,23 @@
             </div>
 
             <div class="projects-grid detailed">
-                <a href="https://github.com/zefiruz" target="_blank" class="project-link">
-                    <div class="project-card detailed">
-                        <h3>Личный сайт</h3>
-                        <p>HTML, CSS</p>
-                    </div>
-                </a>
-                <a href="https://github.com/zefiruz" target="_blank" class="project-link">
-                    <div class="project-card detailed">
-                        <h3>Todo-приложение</h3>
-                        <p>JavaScript</p>
-                    </div>
-                </a>
-                <a href="https://github.com/zefiruz" target="_blank" class="project-link">
-                    <div class="project-card detailed">
-                        <h3>Интернет-магазин</h3>
-                        <p>React</p>
-                    </div>
-                </a>
-                <a href="https://github.com/zefiruz" target="_blank" class="project-link">
-                    <div class="project-card detailed">
-                        <h3>Портфолио</h3>
-                        <p>Bootstrap</p>
-                    </div>
-                </a>
+                <!-- Проект 1 -->
+                <div class="project-card detailed" onclick="openModal('modal1')">
+                    <h3>Личный веб-сайт-портфолио</h3>
+                    <p>HTML, CSS</p>
+                </div>
+
+                <!-- Проект 2 -->
+                <div class="project-card detailed" onclick="openModal('modal2')">
+                    <h3>Менеджер питания и тренировок</h3>
+                    <p>C++/Qt</p>
+                </div>
+
+                <!-- Проект 3 -->
+                <div class="project-card detailed" onclick="openModal('modal3')">
+                    <h3>Интернет-магазин</h3>
+                    <p>HTML, CSS, JS</p>
+                </div>
             </div>
         </main>
 
@@ -68,5 +72,163 @@
             <p>&copy; 2025 <a href="contacts.html">Контакты</a></p>
         </footer>
     </div>
+
+    <!-- Модальные окна -->
+    <!-- Модалка для проекта 1 -->
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('modal1')">&times;</span>
+            <h2>Личный сайт</h2>
+            <div class="modal-body">
+                <div class="project-screenshots">
+                    <img src="../images/site.png" alt="Скриншот личного сайта">
+                </div>
+                <div class="project-info">
+                    <h3>Описание проекта</h3>
+                    <p>Полнофункциональный личный веб-сайт-портфолио с адаптивным дизайном. 
+                       Включает главную страницу, раздел проектов, учебный дневник и контакты.</p>
+                    
+                    <h3>Технологии</h3>
+                    <ul>
+                        <li>HTML5</li>
+                        <li>CSS3</li>
+                        <li>JavaScript</li>
+                        <li>Адаптивный дизайн</li>
+                    </ul>
+                    
+                    <h3>Ссылки</h3>
+                    <div class="project-links">
+                        <a href="https://github.com/zefiruz/frontend-and-backend-practice" target="_blank" class="btn">GitHub репозиторий</a>
+                        <a href="https://zefiruz.github.io/frontend-and-backend-practice/" target="_blank" class="btn">Живая демо</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модалка для проекта 2 -->
+    <div id="modal2" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('modal2')">&times;</span>
+            <h2>Менеджер питания и тренировок</h2>
+            <div class="modal-body">
+                <div class="project-screenshots">
+                    <img src="../images/app.png" alt="Скриншот приложения">
+                </div>
+                <div class="project-info">
+                    <h3>Описание проекта</h3>
+                    <p>Приложение создает индивидуальные планы питания и тренировок на основе ваших целей и образа жизни, автоматически адаптируя их по мере прогресса. 
+                        Оно также ведет детальный учет вашей активности и калорийности рациона, предоставляя четкую аналитику для достижения максимальных результатов.</p>
+                    
+                    <h3>Технологии</h3>
+                    <ul>
+                        <li>C++</li>
+                        <li>Qt Creator</li>
+                        <li>SQLite</li>
+                    </ul>
+                    
+                    <h3>Ссылки</h3>
+                    <div class="project-links">
+                        <a href="https://github.com/zefiruz/training-manager" target="_blank" class="btn">GitHub репозиторий</a>
+                        <a href="#" class="btn" onclick="alert('Десктопное приложение - скачайте с GitHub')">Скачать приложение</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модалка для проекта 3 -->
+    <div id="modal3" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('modal3')">&times;</span>
+            <h2>Интернет-магазин</h2>
+            <div class="modal-body">
+                <div class="project-screenshots">
+                    <img src="../images/market.png" alt="Скриншот интернет-магазина">
+                </div>
+                <div class="project-info">
+                    <h3>Описание проекта</h3>
+                    <p>Полноценный интернет-магазин с корзиной покупок, системой фильтрации 
+                       товаров и оформлением заказов.</p>
+                    
+                    <h3>Технологии</h3>
+                    <ul>
+                        <li>HTML5</li>
+                        <li>CSS3</li>
+                        <li>JavaScript</li>
+                        <li>Адаптивный дизайн</li>
+                    </ul>
+                    
+                    <h3>Ссылки</h3>
+                    <div class="project-links">
+                        <a href="https://github.com/zefiruz/frontend-and-backend-practice" target="_blank" class="btn">GitHub репозиторий</a>
+                        <a href="https://zefiruz.github.io/frontend-and-backend-practice/goods.html" target="_blank" class="btn">Живая демо</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Функции для работы с модальными окнами
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Функция переключения темы
+        function toggleTheme() {
+            const body = document.body;
+            const themeBtn = document.querySelector('.theme-btn');
+            const isDark = body.classList.toggle('dark-theme');
+            
+            // Меняем текст и иконку кнопки
+            if (isDark) {
+                themeBtn.innerHTML = '☀️ Тема';
+                themeBtn.title = 'Включить светлую тему';
+            } else {
+                themeBtn.innerHTML = '🌙 Тема';
+                themeBtn.title = 'Включить темную тему';
+            }
+            
+            // Сохраняем выбор в localStorage
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        // Загружаем сохраненную тему при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme');
+            const themeBtn = document.querySelector('.theme-btn');
+            
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-theme');
+                themeBtn.innerHTML = '☀️ Тема';
+                themeBtn.title = 'Включить светлую тему';
+            }
+        });
+
+        // Закрытие модалки при клике вне контента
+        window.onclick = function(event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+
+        // Закрытие модалки на Escape
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const modals = document.querySelectorAll('.modal');
+                modals.forEach(modal => {
+                    modal.style.display = 'none';
+                });
+            }
+        });
+    </script>
 </body>
 </html>

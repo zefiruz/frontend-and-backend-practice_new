@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Дневник - Портфолио студента</title>
     <link rel="stylesheet" href="../styles/styles.css">
+    <style>
+        /* Фикс для фона чтобы не мигал при скролле */
+        body {
+            background-attachment: fixed;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -21,6 +27,11 @@
                     <li><a href="projects.html">Проекты</a></li>
                     <li><a href="diary.html" class="active">Дневник</a></li>
                     <li><a href="contacts.html">Контакты</a></li>
+                    <li>
+                        <button onclick="toggleTheme()" class="theme-btn" title="Переключить тему">
+                            🌙 Тема
+                        </button>
+                    </li>
                 </ul>
             </nav>
         </header>
@@ -31,13 +42,34 @@
             <div class="diary-content">
                 <div class="progress-log">
                     <h3>Последние записи</h3>
-                    <ul class="progress-list">
-                        <li class="completed">10 окт - Верстка макета сайта ✓</li>
-                        <li class="completed">27 окт - JavaScript основы ✓</li>
-                        <li class="in-progress">8 ноя - Оптимизация производительности сайта in progress</li>
-                        <li class="in-progress">01 дек - Адаптивный дизайн in progress</li>
+                    <ul class="progress-list" id="progress-list">
+                        <li class="completed">
+                            <span>10 окт - Верстка макета сайта ✓</span>
+                            <button class="delete-btn" onclick="deleteEntry(this)">✕</button>
+                        </li>
+                        <li class="completed">
+                            <span>27 окт - JavaScript основы ✓</span>
+                            <button class="delete-btn" onclick="deleteEntry(this)">✕</button>
+                        </li>
+                        <li class="in-progress">
+                            <span>8 ноя - Оптимизация производительности сайта in progress</span>
+                            <button class="delete-btn" onclick="deleteEntry(this)">✕</button>
+                        </li>
+                        <li class="in-progress">
+                            <span>01 дек - Адаптивный дизайн in progress</span>
+                            <button class="delete-btn" onclick="deleteEntry(this)">✕</button>
+                        </li>
                     </ul>
-                    <button class="btn">Добавить запись</button>
+                    
+                    <div class="add-entry-form">
+                        <input type="text" id="new-entry-text" placeholder="Новая запись (например: 15 дек - Изучение React)" class="entry-input">
+                        <select id="entry-status" class="status-select">
+                            <option value="in-progress">In Progress</option>
+                            <option value="completed">Completed</option>
+                            <option value="planned">Planned</option>
+                        </select>
+                        <button class="btn" onclick="addNewEntry()">Добавить запись</button>
+                    </div>
                 </div>
                 
                 <div class="current-courses">
@@ -63,6 +95,13 @@
                         </div>
                         <span>50%</span>
                     </div>
+                    
+                    <div class="course-management">
+                        <h4>Управление курсами</h4>
+                        <input type="text" id="new-course-name" placeholder="Название курса" class="course-input">
+                        <input type="number" id="new-course-progress" placeholder="Прогресс %" min="0" max="100" class="course-input">
+                        <button class="btn small-btn" onclick="addNewCourse()">Добавить курс</button>
+                    </div>
                 </div>
             </div>
         </main>
@@ -71,5 +110,197 @@
             <p>&copy; 2025 <a href="contacts.html">Контакты</a></p>
         </footer>
     </div>
+
+    <script>
+        // Функция переключения темы
+        function toggleTheme() {
+            const body = document.body;
+            const themeBtn = document.querySelector('.theme-btn');
+            const isDark = body.classList.toggle('dark-theme');
+            
+            if (isDark) {
+                themeBtn.innerHTML = '☀️ Тема';
+                themeBtn.title = 'Включить светлую тему';
+            } else {
+                themeBtn.innerHTML = '🌙 Тема';
+                themeBtn.title = 'Включить темную тему';
+            }
+            
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        // Функция добавления новой записи
+        function addNewEntry() {
+            const textInput = document.getElementById('new-entry-text');
+            const statusSelect = document.getElementById('entry-status');
+            const progressList = document.getElementById('progress-list');
+            
+            const text = textInput.value.trim();
+            if (!text) {
+                alert('Введите текст записи!');
+                return;
+            }
+            
+            const newEntry = document.createElement('li');
+            newEntry.className = statusSelect.value;
+            newEntry.innerHTML = `
+                <span>${text}</span>
+                <button class="delete-btn" onclick="deleteEntry(this)">✕</button>
+            `;
+            
+            progressList.insertBefore(newEntry, progressList.firstChild);
+            textInput.value = '';
+            
+            // Сохраняем в localStorage
+            saveEntriesToStorage();
+        }
+
+        // Функция удаления записи
+        function deleteEntry(button) {
+            if (confirm('Удалить эту запись?')) {
+                const listItem = button.parentElement;
+                listItem.remove();
+                saveEntriesToStorage();
+            }
+        }
+
+        // Функция добавления нового курса
+        function addNewCourse() {
+            const nameInput = document.getElementById('new-course-name');
+            const progressInput = document.getElementById('new-course-progress');
+            const currentCourses = document.querySelector('.current-courses');
+            
+            const name = nameInput.value.trim();
+            const progress = parseInt(progressInput.value);
+            
+            if (!name || isNaN(progress)) {
+                alert('Заполните все поля корректно!');
+                return;
+            }
+            
+            if (progress < 0 || progress > 100) {
+                alert('Прогресс должен быть от 0 до 100%!');
+                return;
+            }
+            
+            const courseDiv = document.createElement('div');
+            courseDiv.className = 'course';
+            courseDiv.innerHTML = `
+                <span>${name}</span>
+                <div class="progress-bar">
+                    <div class="progress" style="width: ${progress}%"></div>
+                </div>
+                <span>${progress}%</span>
+            `;
+            
+            // Вставляем перед блоком управления курсами
+            const managementDiv = document.querySelector('.course-management');
+            currentCourses.insertBefore(courseDiv, managementDiv);
+            
+            nameInput.value = '';
+            progressInput.value = '';
+            
+            saveCoursesToStorage();
+        }
+
+        // Сохранение записей в localStorage
+        function saveEntriesToStorage() {
+            const entries = [];
+            const listItems = document.querySelectorAll('#progress-list li');
+            
+            listItems.forEach(item => {
+                entries.push({
+                    text: item.querySelector('span').textContent,
+                    status: item.className
+                });
+            });
+            
+            localStorage.setItem('diaryEntries', JSON.stringify(entries));
+        }
+
+        // Сохранение курсов в localStorage
+        function saveCoursesToStorage() {
+            const courses = [];
+            const courseDivs = document.querySelectorAll('.current-courses .course');
+            
+            courseDivs.forEach(div => {
+                if (!div.classList.contains('course-management')) {
+                    const name = div.querySelector('span:first-child').textContent;
+                    const progress = div.querySelector('span:last-child').textContent.replace('%', '');
+                    courses.push({ name, progress: parseInt(progress) });
+                }
+            });
+            
+            localStorage.setItem('diaryCourses', JSON.stringify(courses));
+        }
+
+        // Загрузка данных при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            // Загрузка темы
+            const savedTheme = localStorage.getItem('theme');
+            const themeBtn = document.querySelector('.theme-btn');
+            
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-theme');
+                themeBtn.innerHTML = '☀️ Тема';
+                themeBtn.title = 'Включить светлую тему';
+            }
+            
+            // Загрузка записей
+            const savedEntries = localStorage.getItem('diaryEntries');
+            if (savedEntries) {
+                const entries = JSON.parse(savedEntries);
+                const progressList = document.getElementById('progress-list');
+                progressList.innerHTML = '';
+                
+                entries.forEach(entry => {
+                    const li = document.createElement('li');
+                    li.className = entry.status;
+                    li.innerHTML = `
+                        <span>${entry.text}</span>
+                        <button class="delete-btn" onclick="deleteEntry(this)">✕</button>
+                    `;
+                    progressList.appendChild(li);
+                });
+            }
+            
+            // Загрузка курсов
+            const savedCourses = localStorage.getItem('diaryCourses');
+            if (savedCourses) {
+                const courses = JSON.parse(savedCourses);
+                const currentCourses = document.querySelector('.current-courses');
+                const managementDiv = document.querySelector('.course-management');
+                
+                // Удаляем существующие курсы (кроме управления)
+                const existingCourses = document.querySelectorAll('.current-courses .course');
+                existingCourses.forEach(course => {
+                    if (!course.classList.contains('course-management')) {
+                        course.remove();
+                    }
+                });
+                
+                // Добавляем сохраненные курсы
+                courses.forEach(course => {
+                    const courseDiv = document.createElement('div');
+                    courseDiv.className = 'course';
+                    courseDiv.innerHTML = `
+                        <span>${course.name}</span>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: ${course.progress}%"></div>
+                        </div>
+                        <span>${course.progress}%</span>
+                    `;
+                    currentCourses.insertBefore(courseDiv, managementDiv);
+                });
+            }
+            
+            // Обработка Enter для добавления записей
+            document.getElementById('new-entry-text').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    addNewEntry();
+                }
+            });
+        });
+    </script>
 </body>
 </html>

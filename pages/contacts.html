@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Контакты - Портфолио студента</title>
     <link rel="stylesheet" href="../styles/styles.css">
+    <style>
+        /* Фикс для фона чтобы не мигал при скролле */
+        body {
+            background-attachment: fixed;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -21,6 +27,11 @@
                     <li><a href="projects.html">Проекты</a></li>
                     <li><a href="diary.html">Дневник</a></li>
                     <li><a href="contacts.html" class="active">Контакты</a></li>
+                    <li>
+                        <button onclick="toggleTheme()" class="theme-btn" title="Переключить тему">
+                            🌙 Тема
+                        </button>
+                    </li>
                 </ul>
             </nav>
         </header>
@@ -29,7 +40,7 @@
             <h2>Свяжитесь со мной</h2>
             
             <div class="contacts-content">
-                <form class="contact-form">
+                <form class="contact-form" id="contactForm">
                     <div class="form-group">
                         <label for="name">Имя:</label>
                         <input type="text" id="name" required>
@@ -50,13 +61,55 @@
                     <p>✉ malyamov.s.a@mirea.ru</p>
                     <p>🐱 GitHub: zefiruz</p>
                     <p>🏠 Москва, Россия</p>
+                    <div class="social-links">
+                        <a href="https://github.com/zefiruz" target="_blank" class="social-btn">GitHub</a>
+                        <a href="mailto:malyamov.s.a@mirea.ru" class="social-btn">Email</a>
+                    </div>
                 </div>
             </div>
         </main>
 
         <footer>
-            <p>&copy; 2025 Контакты</p>
+            <p>&copy; 2025 <a href="contacts.html">Контакты</a></p>
         </footer>
     </div>
+
+    <script>
+        // Функция переключения темы
+        function toggleTheme() {
+            const body = document.body;
+            const themeBtn = document.querySelector('.theme-btn');
+            const isDark = body.classList.toggle('dark-theme');
+            
+            if (isDark) {
+                themeBtn.innerHTML = '☀️ Тема';
+                themeBtn.title = 'Включить светлую тему';
+            } else {
+                themeBtn.innerHTML = '🌙 Тема';
+                themeBtn.title = 'Включить темную тему';
+            }
+            
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        // Обработка формы
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Сообщение отправлено! (Это демо-версия)');
+            this.reset();
+        });
+
+        // Загрузка сохраненной темы
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme');
+            const themeBtn = document.querySelector('.theme-btn');
+            
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-theme');
+                themeBtn.innerHTML = '☀️ Тема';
+                themeBtn.title = 'Включить светлую тему';
+            }
+        });
+    </script>
 </body>
 </html>
