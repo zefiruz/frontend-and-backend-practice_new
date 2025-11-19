@@ -2,33 +2,31 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>Проекты - Портфолио студента</title>
     <link rel="stylesheet" href="../styles/styles.css">
-    <style>
-        /* Фикс для фона чтобы не мигал при скролле */
-        body {
-            background-attachment: fixed;
-        }
-    </style>
 </head>
-<body>
+<body class="page">
+    <a class="skip-link" href="#main">Перейти к основному содержимому</a>
+    
     <div class="container">
-        <header>
+        <header class="header">
             <div class="logo">
                 <a href="../index.html" class="logo-link">
-                    <div class="logo-icon"><img src="../images/icons/logo.ico" alt="Логотип"></div>
+                    <div class="logo-icon">
+                        <img src="../images/icons/logo.ico" alt="Логотип" width="32" height="32" loading="lazy">
+                    </div>
                     <h1>Малямов Семён</h1>
                 </a>
             </div>
-            <nav>
-                <ul>
-                    <li><a href="../index.html">Главная</a></li>
-                    <li><a href="projects.html" class="active">Проекты</a></li>
-                    <li><a href="diary.html">Дневник</a></li>
-                    <li><a href="contacts.html">Контакты</a></li>
+            <nav class="nav" aria-label="Основная навигация">
+                <ul class="nav-list">
+                    <li><a href="../index.html" class="nav-link">Главная</a></li>
+                    <li><a href="projects.html" class="nav-link active">Проекты</a></li>
+                    <li><a href="diary.html" class="nav-link">Дневник</a></li>
+                    <li><a href="contacts.html" class="nav-link">Контакты</a></li>
                     <li>
-                        <button onclick="toggleTheme()" class="theme-btn" title="Переключить тему">
+                        <button onclick="toggleTheme()" class="theme-btn nav-link" title="Переключить тему">
                             🌙 Тема
                         </button>
                     </li>
@@ -36,70 +34,130 @@
             </nav>
         </header>
 
-        <main>
-            <div class="projects-header">
-                <h2>Мои проекты</h2>
-                <div class="project-filters">
-                    <button class="filter-btn active">Все</button>
-                    <button class="filter-btn">HTML</button>
-                    <button class="filter-btn">JS</button>
-                    <button class="filter-btn">React</button>
-                </div>
-            </div>
-
-            <div class="projects-grid detailed">
-                <!-- Проект 1 -->
-                <div class="project-card detailed" onclick="openModal('modal1')">
-                    <h3>Личный веб-сайт-портфолио</h3>
-                    <p>HTML, CSS</p>
-                </div>
-
-                <!-- Проект 2 -->
-                <div class="project-card detailed" onclick="openModal('modal2')">
-                    <h3>Менеджер питания и тренировок</h3>
-                    <p>C++/Qt</p>
+        <main id="main" class="main">
+            <section class="projects-section section" aria-labelledby="projects-title">
+                <div class="projects-header">
+                    <h2 id="projects-title" class="section-title">Мои проекты</h2>
+                    
+                    <div class="project-filters" role="group" aria-label="Фильтры проектов">
+                        <button class="filter-btn active" data-filter="all" aria-pressed="true">
+                            Все
+                        </button>
+                        <button class="filter-btn" data-filter="html" aria-pressed="false">
+                            HTML/CSS
+                        </button>
+                        <button class="filter-btn" data-filter="js" aria-pressed="false">
+                            JavaScript
+                        </button>
+                        <button class="filter-btn" data-filter="cpp" aria-pressed="false">
+                            C++
+                        </button>
+                    </div>
                 </div>
 
-                <!-- Проект 3 -->
-                <div class="project-card detailed" onclick="openModal('modal3')">
-                    <h3>Интернет-магазин</h3>
-                    <p>HTML, CSS, JS</p>
+                <div class="projects-grid" id="projects-grid">
+                    <!-- Проект 1 -->
+                    <article class="project-card" data-categories="html js" tabindex="0" 
+                             onclick="openModal('modal1')" 
+                             onkeydown="handleProjectKeydown(event, 'modal1')">
+                        <div class="project-image">
+                            <img src="../images/site.png" alt="Скриншот личного сайта" width="300" height="200" loading="lazy">
+                        </div>
+                        <div class="project-content">
+                            <h3 class="project-title">Личный веб-сайт-портфолио</h3>
+                            <p class="project-tech">HTML, CSS, JavaScript</p>
+                            <p class="project-description">Адаптивный веб-сайт с современным дизайном и полной функциональностью</p>
+                        </div>
+                    </article>
+
+                    <!-- Проект 2 -->
+                    <article class="project-card" data-categories="cpp" tabindex="0"
+                             onclick="openModal('modal2')" 
+                             onkeydown="handleProjectKeydown(event, 'modal2')">
+                        <div class="project-image">
+                            <img src="../images/train.png" alt="Скриншот приложения" width="300" height="200" loading="lazy">
+                        </div>
+                        <div class="project-content">
+                            <h3 class="project-title">Менеджер питания и тренировок</h3>
+                            <p class="project-tech">C++/Qt, SQLite</p>
+                            <p class="project-description">Десктопное приложение для управления тренировками и питанием</p>
+                        </div>
+                    </article>
+
+                    <!-- Проект 3 -->
+                    <article class="project-card" data-categories="html js" tabindex="0"
+                             onclick="openModal('modal3')" 
+                             onkeydown="handleProjectKeydown(event, 'modal3')">
+                        <div class="project-image">
+                            <img src="../images/market.png" alt="Скриншот интернет-магазина" width="300" height="200" loading="lazy">
+                        </div>
+                        <div class="project-content">
+                            <h3 class="project-title">Интернет-магазин</h3>
+                            <p class="project-tech">HTML, CSS, JavaScript</p>
+                            <p class="project-description">Полнофункциональный онлайн-магазин с корзиной и фильтрацией</p>
+                        </div>
+                    </article>
                 </div>
-            </div>
+            </section>
         </main>
 
-        <footer>
-            <p>&copy; 2025 <a href="contacts.html">Контакты</a></p>
+        <footer class="footer">
+            <p>&copy; 2025 <a href="contacts.html" class="footer-link">Контакты</a></p>
         </footer>
     </div>
 
     <!-- Модальные окна -->
     <!-- Модалка для проекта 1 -->
-    <div id="modal1" class="modal">
+    <!-- Модалка для проекта 1 -->
+    <div id="modal1" class="modal" role="dialog" aria-labelledby="modal1-title" aria-hidden="true">
         <div class="modal-content">
-            <span class="close" onclick="closeModal('modal1')">&times;</span>
-            <h2>Личный сайт</h2>
+            <button class="close" onclick="closeModal('modal1')" aria-label="Закрыть окно">
+                &times;
+            </button>
+            <h2 id="modal1-title">Личный сайт-портфолио</h2>
             <div class="modal-body">
                 <div class="project-screenshots">
-                    <img src="../images/site.png" alt="Скриншот личного сайта">
+                    <img src="../images/site.png" 
+                        alt="Главная страница личного сайта" 
+                        width="400" 
+                        height="300" 
+                        loading="lazy">
                 </div>
                 <div class="project-info">
                     <h3>Описание проекта</h3>
                     <p>Полнофункциональный личный веб-сайт-портфолио с адаптивным дизайном. 
-                       Включает главную страницу, раздел проектов, учебный дневник и контакты.</p>
+                    Включает главную страницу, раздел проектов, учебный дневник и контакты.</p>
                     
                     <h3>Технологии</h3>
                     <ul>
                         <li>HTML5</li>
-                        <li>CSS3</li>
-                        <li>JavaScript</li>
+                        <li>CSS3 с Grid и Flexbox</li>
+                        <li>JavaScript (ES6+)</li>
                         <li>Адаптивный дизайн</li>
+                        <li>Доступность (ARIA, семантическая верстка)</li>
                     </ul>
                     
-                    <h3>Ссылки</h3>
+                    <h3>Особенности</h3>
+                    <ul>
+                        <li>Темная/светлая тема</li>
+                        <li>Адаптивная сетка проектов</li>
+                        <li>Интерактивные элементы</li>
+                        <li>Оптимизированная производительность</li>
+                    </ul>
+                    
                     <div class="project-links">
-                        <a href="https://github.com/zefiruz/frontend-and-backend-practice" target="_blank" class="btn">GitHub репозиторий</a>
-                        <a href="https://zefiruz.github.io/frontend-and-backend-practice/" target="_blank" class="btn">Живая демо</a>
+                        <a href="https://github.com/zefiruz/frontend-and-backend-practice" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        class="btn btn-primary">
+                            GitHub репозиторий
+                        </a>
+                        <a href="https://zefiruz.github.io/frontend-and-backend-practice/" 
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="btn btn-secondary">
+                            Живая демо
+                        </a>
                     </div>
                 </div>
             </div>
@@ -107,30 +165,50 @@
     </div>
 
     <!-- Модалка для проекта 2 -->
-    <div id="modal2" class="modal">
+    <div id="modal2" class="modal" role="dialog" aria-labelledby="modal2-title" aria-hidden="true">
         <div class="modal-content">
-            <span class="close" onclick="closeModal('modal2')">&times;</span>
-            <h2>Менеджер питания и тренировок</h2>
+            <button class="close" onclick="closeModal('modal2')" aria-label="Закрыть окно">
+                &times;
+            </button>
+            <h2 id="modal2-title">Менеджер питания и тренировок</h2>
             <div class="modal-body">
                 <div class="project-screenshots">
-                    <img src="../images/app.png" alt="Скриншот приложения">
+                    <img src="../images/train.png" 
+                        alt="Интерфейс приложения менеджера тренировок" 
+                        width="400" 
+                        height="300" 
+                        loading="lazy">
                 </div>
                 <div class="project-info">
                     <h3>Описание проекта</h3>
-                    <p>Приложение создает индивидуальные планы питания и тренировок на основе ваших целей и образа жизни, автоматически адаптируя их по мере прогресса. 
-                        Оно также ведет детальный учет вашей активности и калорийности рациона, предоставляя четкую аналитику для достижения максимальных результатов.</p>
+                    <p>Приложение создает индивидуальные планы питания и тренировок на основе ваших целей и образа жизни, автоматически адаптируя их по мере прогресса.</p>
                     
                     <h3>Технологии</h3>
                     <ul>
-                        <li>C++</li>
+                        <li>C++17</li>
                         <li>Qt Creator</li>
                         <li>SQLite</li>
+                        <li>Многопоточность</li>
                     </ul>
                     
-                    <h3>Ссылки</h3>
+                    <h3>Функциональность</h3>
+                    <ul>
+                        <li>Создание персонализированных планов</li>
+                        <li>Отслеживание прогресса</li>
+                        <li>Аналитика и отчеты</li>
+                        <li>Локальное хранение данных</li>
+                    </ul>
+                    
                     <div class="project-links">
-                        <a href="https://github.com/zefiruz/training-manager" target="_blank" class="btn">GitHub репозиторий</a>
-                        <a href="#" class="btn" onclick="alert('Десктопное приложение - скачайте с GitHub')">Скачать приложение</a>
+                        <a href="https://github.com/zefiruz/training-manager" 
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="btn btn-primary">
+                            GitHub репозиторий
+                        </a>
+                        <button class="btn btn-secondary" onclick="showDownloadNotification()">
+                            Скачать приложение
+                        </button>
                     </div>
                 </div>
             </div>
@@ -138,31 +216,53 @@
     </div>
 
     <!-- Модалка для проекта 3 -->
-    <div id="modal3" class="modal">
+    <div id="modal3" class="modal" role="dialog" aria-labelledby="modal3-title" aria-hidden="true">
         <div class="modal-content">
-            <span class="close" onclick="closeModal('modal3')">&times;</span>
-            <h2>Интернет-магазин</h2>
+            <button class="close" onclick="closeModal('modal3')" aria-label="Закрыть окно">
+                &times;
+            </button>
+            <h2 id="modal3-title">Интернет-магазин</h2>
             <div class="modal-body">
                 <div class="project-screenshots">
-                    <img src="../images/market.png" alt="Скриншот интернет-магазина">
+                    <img src="../images/market.png" 
+                        alt="Главная страница интернет-магазина" 
+                        width="400" 
+                        height="300" 
+                        loading="lazy">
                 </div>
                 <div class="project-info">
                     <h3>Описание проекта</h3>
-                    <p>Полноценный интернет-магазин с корзиной покупок, системой фильтрации 
-                       товаров и оформлением заказов.</p>
+                    <p>Полноценный интернет-магазин с корзиной покупок, системой фильтрации товаров и оформлением заказов.</p>
                     
                     <h3>Технологии</h3>
                     <ul>
                         <li>HTML5</li>
-                        <li>CSS3</li>
-                        <li>JavaScript</li>
-                        <li>Адаптивный дизайн</li>
+                        <li>CSS3 с CSS Grid</li>
+                        <li>JavaScript (модули ES6)</li>
+                        <li>Local Storage API</li>
                     </ul>
                     
-                    <h3>Ссылки</h3>
+                    <h3>Возможности</h3>
+                    <ul>
+                        <li>Добавление товаров в корзину</li>
+                        <li>Фильтрация и поиск</li>
+                        <li>Адаптивный дизайн</li>
+                        <li>Оформление заказа</li>
+                    </ul>
+                    
                     <div class="project-links">
-                        <a href="https://github.com/zefiruz/frontend-and-backend-practice" target="_blank" class="btn">GitHub репозиторий</a>
-                        <a href="https://zefiruz.github.io/frontend-and-backend-practice/goods.html" target="_blank" class="btn">Живая демо</a>
+                        <a href="https://github.com/zefiruz/frontend-and-backend-practice" 
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="btn btn-primary">
+                            GitHub репозиторий
+                        </a>
+                        <a href="https://zefiruz.github.io/frontend-and-backend-practice/goods.html" 
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="btn btn-secondary">
+                            Живая демо
+                        </a>
                     </div>
                 </div>
             </div>
@@ -172,11 +272,29 @@
     <script>
         // Функции для работы с модальными окнами
         function openModal(modalId) {
-            document.getElementById(modalId).style.display = 'block';
+            const modal = document.getElementById(modalId);
+            modal.style.display = 'block';
+            modal.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden'; // Блокируем скролл
+            
+            // Фокус на первом интерактивном элементе модалки
+            const firstFocusable = modal.querySelector('button, a, input');
+            if (firstFocusable) firstFocusable.focus();
         }
 
         function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
+            const modal = document.getElementById(modalId);
+            modal.style.display = 'none';
+            modal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = ''; // Разблокируем скролл
+        }
+
+        // Обработка клавиатуры для карточек проектов
+        function handleProjectKeydown(event, modalId) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                openModal(modalId);
+            }
         }
 
         // Функция переключения темы
@@ -185,17 +303,84 @@
             const themeBtn = document.querySelector('.theme-btn');
             const isDark = body.classList.toggle('dark-theme');
             
-            // Меняем текст и иконку кнопки
             if (isDark) {
                 themeBtn.innerHTML = '☀️ Тема';
                 themeBtn.title = 'Включить светлую тему';
+                themeBtn.setAttribute('aria-label', 'Переключить на светлую тему');
             } else {
                 themeBtn.innerHTML = '🌙 Тема';
                 themeBtn.title = 'Включить темную тему';
+                themeBtn.setAttribute('aria-label', 'Переключить на темную тему');
             }
             
-            // Сохраняем выбор в localStorage
             localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        // Фильтрация проектов
+        function filterProjects(filter) {
+            const projects = document.querySelectorAll('.project-card');
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            
+            // Обновляем активную кнопку
+            filterButtons.forEach(btn => {
+                const isActive = btn.dataset.filter === filter;
+                btn.classList.toggle('active', isActive);
+                btn.setAttribute('aria-pressed', isActive);
+            });
+            
+            // Фильтруем проекты
+            projects.forEach(project => {
+                const categories = project.dataset.categories.split(' ');
+                const shouldShow = filter === 'all' || categories.includes(filter);
+                
+                project.style.display = shouldShow ? 'block' : 'none';
+                
+                // Анимация появления
+                if (shouldShow) {
+                    project.style.opacity = '0';
+                    project.style.transform = 'translateY(20px)';
+                    setTimeout(() => {
+                        project.style.opacity = '1';
+                        project.style.transform = 'translateY(0)';
+                        project.style.transition = 'all 0.3s ease';
+                    }, 50);
+                }
+            });
+        }
+
+        // Уведомление для скачивания
+        function showDownloadNotification() {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.setAttribute('role', 'alert');
+            notification.setAttribute('aria-live', 'polite');
+            notification.textContent = 'Десктопное приложение - скачайте с GitHub репозитория';
+            
+            Object.assign(notification.style, {
+                position: 'fixed',
+                top: '20px',
+                right: '20px',
+                padding: '1rem 1.5rem',
+                background: '#3366cc',
+                color: 'white',
+                borderRadius: '4px',
+                zIndex: '10000',
+                fontWeight: 'bold',
+                boxShadow: '0 2px 10px rgba(0,0,0,0.3)',
+                maxWidth: 'min(300px, 90vw)'
+            });
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transition = 'opacity 0.3s ease';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 4000);
         }
 
         // Загружаем сохраненную тему при загрузке страницы
@@ -207,28 +392,297 @@
                 document.body.classList.add('dark-theme');
                 themeBtn.innerHTML = '☀️ Тема';
                 themeBtn.title = 'Включить светлую тему';
+                themeBtn.setAttribute('aria-label', 'Переключить на светлую тему');
+            }
+            
+            // Инициализация фильтров
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            filterButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterProjects(btn.dataset.filter);
+                });
+            });
+            
+            // Добавляем поддержку контейнерных запросов
+            if ('container' in document.documentElement.style) {
+                document.body.classList.add('supports-container-queries');
             }
         });
 
         // Закрытие модалки при клике вне контента
-        window.onclick = function(event) {
+        window.addEventListener('click', function(event) {
             const modals = document.querySelectorAll('.modal');
             modals.forEach(modal => {
                 if (event.target === modal) {
-                    modal.style.display = 'none';
+                    closeModal(modal.id);
                 }
             });
-        }
+        });
 
         // Закрытие модалки на Escape
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
                 const modals = document.querySelectorAll('.modal');
                 modals.forEach(modal => {
-                    modal.style.display = 'none';
+                    if (modal.style.display === 'block') {
+                        closeModal(modal.id);
+                    }
                 });
             }
         });
+
+        // Ловушка фокуса внутри модальных окон
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Tab') {
+                const modal = document.querySelector('.modal[style*="display: block"]');
+                if (modal) {
+                    const focusableElements = modal.querySelectorAll('button, a, input, select, textarea');
+                    const firstElement = focusableElements[0];
+                    const lastElement = focusableElements[focusableElements.length - 1];
+                    
+                    if (event.shiftKey) {
+                        if (document.activeElement === firstElement) {
+                            lastElement.focus();
+                            event.preventDefault();
+                        }
+                    } else {
+                        if (document.activeElement === lastElement) {
+                            firstElement.focus();
+                            event.preventDefault();
+                        }
+                    }
+                }
+            }
+        });
+
+        // Динамическая загрузка стилей для улучшений
+        const style = document.createElement('style');
+        style.textContent = `
+            .projects-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+                gap: clamp(1rem, 2vw, 1.5rem);
+            }
+            
+            .project-card {
+                background: #cccccc;
+                border: 2px outset #999;
+                border-radius: 4px;
+                padding: clamp(1rem, 2vw, 1.5rem);
+                cursor: pointer;
+                transition: all 0.3s ease;
+                min-width: 0;
+                display: block;
+            }
+            
+            .project-card:hover,
+            .project-card:focus {
+                background: #dddddd;
+                border: 2px inset #999;
+                transform: translateY(-4px);
+                outline: none;
+            }
+            
+            .project-card:focus {
+                outline: 3px solid #3366cc;
+                outline-offset: 2px;
+            }
+            
+            .project-image {
+                width: 100%;
+                height: 200px;
+                background: #f0f0f0;
+                border: 1px solid #999;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                overflow: hidden;
+                margin-bottom: 1rem;
+            }
+            
+            .project-image img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+            
+            .project-title {
+                color: #3366cc;
+                font-size: clamp(1.1rem, 1rem + 0.5vw, 1.25rem);
+                margin-bottom: 0.5rem;
+                font-weight: bold;
+            }
+            
+            .project-tech {
+                color: #666;
+                font-weight: bold;
+                margin-bottom: 0.75rem;
+                font-size: 0.9rem;
+            }
+            
+            .project-description {
+                color: #333;
+                line-height: 1.4;
+                font-size: 0.9rem;
+            }
+            
+            .modal {
+                display: none;
+                position: fixed;
+                z-index: 1000;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.7);
+                backdrop-filter: blur(2px);
+            }
+            
+            .modal-content {
+                background-color: white;
+                margin: 2% auto;
+                padding: clamp(1rem, 3vw, 2rem);
+                border: 3px outset #999;
+                width: min(90%, 800px);
+                max-height: 90vh;
+                overflow-y: auto;
+                position: relative;
+                border-radius: 4px;
+            }
+            
+            .close {
+                color: #aaa;
+                position: absolute;
+                top: 1rem;
+                right: 1.5rem;
+                font-size: 2rem;
+                font-weight: bold;
+                cursor: pointer;
+                background: none;
+                border: none;
+                padding: 0;
+                width: 2rem;
+                height: 2rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .close:hover {
+                color: #ff6600;
+            }
+            
+            .modal-body {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            @media (min-width: 768px) {
+                .modal-body {
+                    grid-template-columns: 1fr 1fr;
+                }
+            }
+            
+            .project-screenshots img {
+                width: 100%;
+                border: 2px outset #999;
+                background: #f0f0f0;
+                padding: 5px;
+            }
+            
+            .project-info h3 {
+                color: #ff6600;
+                margin: 1.5rem 0 0.5rem 0;
+                font-size: 1.1rem;
+            }
+            
+            .project-info ul {
+                margin-left: 1.5rem;
+                margin-bottom: 1rem;
+            }
+            
+            .project-info li {
+                margin-bottom: 0.5rem;
+            }
+            
+            .project-links {
+                display: flex;
+                gap: 1rem;
+                flex-wrap: wrap;
+                margin-top: 1.5rem;
+            }
+            
+            .btn-secondary {
+                background: linear-gradient(to bottom, #6699ff, #3366cc);
+                color: white;
+                border-color: #3366cc;
+            }
+            
+            .btn-secondary:hover {
+                background: linear-gradient(to bottom, #3366cc, #2244aa);
+            }
+            
+            .dark-theme .project-card {
+                background: #333;
+                border-color: #555;
+            }
+            
+            .dark-theme .project-card:hover {
+                background: #444;
+            }
+            
+            .dark-theme .project-image {
+                background: #444;
+                border-color: #555;
+            }
+            
+            .dark-theme .modal-content {
+                background-color: #2d2d2d;
+                border-color: #666;
+                color: #e0e0e0;
+            }
+            
+            /* Анимации */
+            .project-card {
+                transition: all 0.3s ease;
+            }
+            
+            .modal-content {
+                animation: modalAppear 0.3s ease;
+            }
+            
+            @keyframes modalAppear {
+                from {
+                    opacity: 0;
+                    transform: scale(0.9) translateY(-20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: scale(1) translateY(0);
+                }
+            }
+            
+            /* Контейнерные запросы */
+            @supports (container-type: inline-size) {
+                .projects-section {
+                    container-type: inline-size;
+                }
+                
+                @container (min-width: 600px) {
+                    .projects-grid {
+                        grid-template-columns: repeat(2, 1fr);
+                    }
+                }
+                
+                @container (min-width: 900px) {
+                    .projects-grid {
+                        grid-template-columns: repeat(3, 1fr);
+                    }
+                }
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>

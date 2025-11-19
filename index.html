@@ -2,132 +2,144 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>Портфолио студента</title>
     <link rel="stylesheet" href="styles/styles.css">
-    <style>
-        /* Фикс для фона чтобы не мигал при скролле */
-        body {
-            background-attachment: fixed;
-        }
-    </style>
 </head>
-<body>
+<body class="page">
+    <a class="skip-link" href="#main">Перейти к основному содержимому</a>
+    
     <div class="container">
-        <header>
+        <header class="header">
             <div class="logo">
                 <a href="index.html" class="logo-link">
-                    <div class="logo-icon"><img src="images/icons/logo.ico" alt="Логотип"></div>
+                    <div class="logo-icon">
+                        <img src="images/icons/logo.ico" alt="Логотип" width="32" height="32" loading="lazy">
+                    </div>
                     <h1>Малямов Семён</h1>
                 </a>
             </div>
-            <nav>
-                <ul>
-                    <li><a href="index.html" class="active">Главная</a></li>
-                    <li><a href="pages/projects.html">Проекты</a></li>
-                    <li><a href="pages/diary.html">Дневник</a></li>
-                    <li><a href="pages/contacts.html">Контакты</a></li>
+            <nav class="nav" aria-label="Основная навигация">
+                <ul class="nav-list">
+                    <li><a href="index.html" class="nav-link active">Главная</a></li>
+                    <li><a href="pages/projects.html" class="nav-link">Проекты</a></li>
+                    <li><a href="pages/diary.html" class="nav-link">Дневник</a></li>
+                    <li><a href="pages/contacts.html" class="nav-link">Контакты</a></li>
                     <li>
-                        <button onclick="toggleTheme()" class="theme-btn" title="Переключить тему">
+                        <button onclick="toggleTheme()" class="theme-btn nav-link" title="Переключить тему">
                             🌙 Тема
                         </button>
                     </li>
                 </ul>
             </nav>
         </header>
-        <main>
-            <div class="content">
-                <div class="intro">
-                    <h2>Привет! Я студент группы ЭФБО-02-24</h2>
-                    <p>В свободное время занимаюсь веб-разработкой, создавая и поддерживая сайты. Для меня это творческий процесс, где код становится инструментом для решения практических задач.</p>
-                    <a href="assets/resume.txt" class="btn" download>Скачать резюме</a>
+        
+        <main id="main" class="main">
+            <section class="hero section">
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <h2 class="hero-title">Привет! Я студент группы ЭФБО-02-24</h2>
+                        <p class="hero-description">В свободное время занимаюсь веб-разработкой, создавая и поддерживая сайты. Для меня это творческий процесс, где код становится инструментом для решения практических задач.</p>
+                        <a href="assets/resume.txt" class="btn btn-primary" download>Скачать резюме</a>
+                    </div>
+                    <div class="hero-photo">
+                        <figure class="hero-image">
+                            <img class="hero-photo-img" 
+                                src="images/grusha.jpg" 
+                                width="200" height="200" 
+                                alt="Портрет студента" 
+                                loading="eager"
+                                decoding="async">
+                        </figure>
+                    </div>
                 </div>
-                <div class="photo">
-                    <img src="images/grusha.jpg" alt="Моя фотография" class="photo-img">
-                </div>
-            </div>
+            </section>
 
-            <div class="skills-section">
-                <h2>Мои навыки</h2>
+            <section class="skills-section section">
+                <h2 class="section-title">Мои навыки</h2>
                 <div class="skills">
                     <div class="skill">
-                        <span>HTML/CSS</span>
+                        <span class="skill-name">HTML/CSS</span>
                         <div class="skill-bar">
                             <div class="skill-level" style="width: 90%"></div>
                         </div>
-                        <span>90%</span>
+                        <span class="skill-percent">90%</span>
                     </div>
                     <div class="skill">
-                        <span>JavaScript</span>
+                        <span class="skill-name">JavaScript</span>
                         <div class="skill-bar">
                             <div class="skill-level" style="width: 80%"></div>
                         </div>
-                        <span>80%</span>
+                        <span class="skill-percent">80%</span>
                     </div>
                     <div class="skill">
-                        <span>Go</span>
+                        <span class="skill-name">Go</span>
                         <div class="skill-bar">
                             <div class="skill-level" style="width: 85%"></div>
                         </div>
-                        <span>85%</span>
+                        <span class="skill-percent">85%</span>
                     </div>
                     <div class="skill">
-                        <span>C++</span>
+                        <span class="skill-name">C++</span>
                         <div class="skill-bar">
                             <div class="skill-level" style="width: 60%"></div>
                         </div>
-                        <span>60%</span>
+                        <span class="skill-percent">60%</span>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="projects-preview">
-                <h2>Лучшие проекты</h2>
+            <section class="projects-preview section">
+                <h2 class="section-title">Лучшие проекты</h2>
                 <div class="projects-grid">
                     <a href="pages/projects.html" class="project-link">
-                        <div class="project-card">
+                        <article class="project-card">
                             <div class="project-image">
-                                <img src="images/site.png" alt="Мой сайт">
+                                <img src="images/site.png" alt="Мой сайт" width="300" height="200" loading="lazy">
                             </div>
-                            <h3>Мой сайт</h3>
-                            <p>Личный веб-сайт-портфолио</p>
-                        </div>
+                            <div class="project-content">
+                                <h3 class="project-title">Мой сайт</h3>
+                                <p class="project-description">Личный веб-сайт-портфолио</p>
+                            </div>
+                        </article>
                     </a>
                     <a href="pages/projects.html" class="project-link">
-                        <div class="project-card">
+                        <article class="project-card">
                             <div class="project-image">
-                                <img src="images/train.png" alt="Менеджер питания">
+                                <img src="images/train.png" alt="Менеджер питания" width="300" height="200" loading="lazy">
                             </div>
-                            <h3>Менеджер питания и тренировок</h3>
-                            <p>Приложение для управления тренировками и питанием</p>
-                        </div>
+                            <div class="project-content">
+                                <h3 class="project-title">Менеджер питания и тренировок</h3>
+                                <p class="project-description">Приложение для управления тренировками и питанием</p>
+                            </div>
+                        </article>
                     </a>
                     <a href="pages/projects.html" class="project-link">
-                        <div class="project-card">
+                        <article class="project-card">
                             <div class="project-image">
-                                <img src="images/market.png" alt="Онлайн магазин">
+                                <img src="images/market.png" alt="Онлайн магазин" width="300" height="200" loading="lazy">
                             </div>
-                            <h3>Онлайн магазин</h3>
-                            <p>Интернет-магазин с системой заказов</p>
-                        </div>
+                            <div class="project-content">
+                                <h3 class="project-title">Онлайн магазин</h3>
+                                <p class="project-description">Интернет-магазин с системой заказов</p>
+                            </div>
+                        </article>
                     </a>
                 </div>
-            </div>
+            </section>
         </main>
 
-        <footer>
-            <p>&copy; 2025 <a href="pages/contacts.html">Контакты</a></p>
+        <footer class="footer">
+            <p>&copy; 2025 <a href="pages/contacts.html" class="footer-link">Контакты</a></p>
         </footer>
     </div>
 
     <script>
-        // Функция переключения темы
         function toggleTheme() {
             const body = document.body;
             const themeBtn = document.querySelector('.theme-btn');
             const isDark = body.classList.toggle('dark-theme');
             
-            // Меняем текст и иконку кнопки
             if (isDark) {
                 themeBtn.innerHTML = '☀️ Тема';
                 themeBtn.title = 'Включить светлую тему';
@@ -136,11 +148,9 @@
                 themeBtn.title = 'Включить темную тему';
             }
             
-            // Сохраняем выбор в localStorage
             localStorage.setItem('theme', isDark ? 'dark' : 'light');
         }
 
-        // Загружаем сохраненную тему при загрузке страницы
         document.addEventListener('DOMContentLoaded', function() {
             const savedTheme = localStorage.getItem('theme');
             const themeBtn = document.querySelector('.theme-btn');
@@ -149,6 +159,11 @@
                 document.body.classList.add('dark-theme');
                 themeBtn.innerHTML = '☀️ Тема';
                 themeBtn.title = 'Включить светлую тему';
+            }
+            
+            // Прогрессивное улучшение для контейнерных запросов
+            if ('container' in document.documentElement.style) {
+                document.body.classList.add('supports-container-queries');
             }
         });
     </script>
