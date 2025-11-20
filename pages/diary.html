@@ -12,7 +12,10 @@
             <div class="logo">
                 <a href="../index.html" class="logo-link">
                     <div class="logo-icon">
-                        <img src="../images/icons/logo.ico" alt="Логотип" width="32" height="32" loading="lazy">
+                        <!-- Retina-совместимое лого -->
+                        <img src="../images/icons/logo@1x.ico" 
+                             srcset="../images/icons/logo@1x.ico 1x, ../images/icons/logo@2x.ico 2x"
+                             alt="Логотип" width="32" height="32" loading="lazy">
                     </div>
                     <h1>Малямов Семён</h1>
                 </a>
@@ -37,6 +40,7 @@
                 <h2 class="section-title">Мой учебный прогресс</h2>
                 
                 <div class="diary-content">
+                    <!-- Основной контент дневника -->
                     <article class="progress-log" aria-labelledby="progress-log-title">
                         <h3 id="progress-log-title">Последние записи</h3>
                         
@@ -54,7 +58,7 @@
                                         type="text" 
                                         id="new-entry-text" 
                                         class="form-input entry-input"
-                                        placeholder="Например: 15 дек - Изучение React"
+                                        placeholder="Например: Изучение адаптивной верстки"
                                         aria-required="true"
                                         required
                                     >
@@ -63,19 +67,20 @@
                                 <div class="form-group">
                                     <label for="entry-status" class="form-label">Статус:</label>
                                     <select id="entry-status" class="form-select status-select" aria-label="Выберите статус записи">
-                                        <option value="planned">Запланировано</option>
-                                        <option value="in-progress">В процессе</option>
-                                        <option value="completed">Завершено</option>
+                                        <option value="planned">📅 Запланировано</option>
+                                        <option value="in-progress">🔄 В процессе</option>
+                                        <option value="completed">✅ Завершено</option>
                                     </select>
                                 </div>
                             </div>
                             
                             <button type="submit" class="btn btn-primary">
-                                Добавить запись
+                                ➕ Добавить запись
                             </button>
                         </form>
                     </article>
                     
+                    <!-- Боковая панель с курсами -->
                     <aside class="current-courses" aria-labelledby="courses-title">
                         <h3 id="courses-title">Текущие курсы</h3>
                         
@@ -115,476 +120,485 @@
                             </div>
                             
                             <button type="submit" class="btn btn-secondary">
-                                Добавить курс
+                                📚 Добавить курс
                             </button>
                         </form>
                     </aside>
                 </div>
+
+                <!-- Статистика обучения -->
+                <section class="learning-stats" aria-labelledby="stats-title">
+                    <h3 id="stats-title" class="visually-hidden">Статистика обучения</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">📝</div>
+                            <div class="stat-number" id="total-entries">0</div>
+                            <div class="stat-label">Всего записей</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">✅</div>
+                            <div class="stat-number" id="completed-entries">0</div>
+                            <div class="stat-label">Завершено</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">📚</div>
+                            <div class="stat-number" id="total-courses">0</div>
+                            <div class="stat-label">Активных курсов</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">📈</div>
+                            <div class="stat-number" id="avg-progress">0%</div>
+                            <div class="stat-label">Средний прогресс</div>
+                        </div>
+                    </div>
+                </section>
             </section>
         </main>
 
         <footer class="footer">
-            <p>&copy; 2025 <a href="contacts.html" class="footer-link">Контакты</a></p>
+            <p>&copy; 2025 Малямов Семён. <a href="contacts.html" class="footer-link">Контакты</a></p>
         </footer>
     </div>
 
     <script>
-        // Функция переключения темы
+        // Менеджер дневника
+        const DiaryManager = {
+            // Инициализация
+            init() {
+                this.loadTheme();
+                this.loadData();
+                this.setupEventListeners();
+                this.updateStatistics();
+            },
+
+            // Загрузка темы
+            loadTheme() {
+                const savedTheme = localStorage.getItem('theme');
+                const themeBtn = document.querySelector('.theme-btn');
+                
+                if (savedTheme === 'dark') {
+                    document.body.classList.add('dark-theme');
+                    themeBtn.innerHTML = '☀️ Тема';
+                    themeBtn.title = 'Включить светлую тему';
+                }
+            },
+
+            // Настройка обработчиков событий
+            setupEventListeners() {
+                document.getElementById('add-entry-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.addNewEntry();
+                });
+
+                document.getElementById('course-management-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.addNewCourse();
+                });
+
+                // Быстрое добавление записи по Enter
+                document.getElementById('new-entry-text').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        this.addNewEntry();
+                    }
+                });
+            },
+
+            // Добавление новой записи
+            addNewEntry() {
+                const textInput = document.getElementById('new-entry-text');
+                const statusSelect = document.getElementById('entry-status');
+                const progressList = document.getElementById('progress-list');
+                
+                const text = textInput.value.trim();
+                if (!text) {
+                    this.showNotification('Введите текст записи!', 'error');
+                    textInput.focus();
+                    return;
+                }
+                
+                const entryId = 'entry-' + Date.now();
+                const newEntry = document.createElement('li');
+                newEntry.className = `entry-item ${statusSelect.value}`;
+                newEntry.id = entryId;
+                newEntry.innerHTML = `
+                    <span class="entry-text">${text}</span>
+                    <div class="entry-actions">
+                        <button class="status-btn" onclick="DiaryManager.toggleEntryStatus('${entryId}')" aria-label="Изменить статус">
+                            ${this.getStatusIcon(statusSelect.value)}
+                        </button>
+                        <button class="delete-btn" onclick="DiaryManager.deleteEntry('${entryId}')" aria-label="Удалить запись">✕</button>
+                    </div>
+                `;
+                
+                progressList.insertBefore(newEntry, progressList.firstChild);
+                textInput.value = '';
+                textInput.focus();
+                
+                this.showNotification('Запись успешно добавлена!', 'success');
+                this.saveData();
+                this.updateStatistics();
+            },
+
+            // Переключение статуса записи
+            toggleEntryStatus(entryId) {
+                const entry = document.getElementById(entryId);
+                const currentStatus = Array.from(entry.classList).find(cls => 
+                    ['planned', 'in-progress', 'completed'].includes(cls)
+                );
+                
+                const statusOrder = ['planned', 'in-progress', 'completed'];
+                const currentIndex = statusOrder.indexOf(currentStatus);
+                const nextStatus = statusOrder[(currentIndex + 1) % statusOrder.length];
+                
+                entry.className = `entry-item ${nextStatus}`;
+                entry.querySelector('.status-btn').innerHTML = this.getStatusIcon(nextStatus);
+                
+                this.saveData();
+                this.updateStatistics();
+            },
+
+            // Удаление записи
+            deleteEntry(entryId) {
+                const entry = document.getElementById(entryId);
+                const entryText = entry.querySelector('.entry-text').textContent;
+                
+                if (confirm(`Удалить запись "${entryText}"?`)) {
+                    entry.style.opacity = '0';
+                    entry.style.transform = 'translateX(-20px)';
+                    
+                    setTimeout(() => {
+                        entry.remove();
+                        this.showNotification('Запись удалена', 'info');
+                        this.saveData();
+                        this.updateStatistics();
+                    }, 300);
+                }
+            },
+
+            // Добавление нового курса
+            addNewCourse() {
+                const nameInput = document.getElementById('new-course-name');
+                const progressInput = document.getElementById('new-course-progress');
+                const coursesList = document.getElementById('courses-list');
+                
+                const name = nameInput.value.trim();
+                const progress = parseInt(progressInput.value);
+                
+                if (!name || isNaN(progress)) {
+                    this.showNotification('Заполните все поля корректно!', 'error');
+                    return;
+                }
+                
+                if (progress < 0 || progress > 100) {
+                    this.showNotification('Прогресс должен быть от 0 до 100%!', 'error');
+                    progressInput.focus();
+                    return;
+                }
+                
+                const courseId = 'course-' + Date.now();
+                const courseDiv = document.createElement('div');
+                courseDiv.className = 'course';
+                courseDiv.id = courseId;
+                courseDiv.innerHTML = `
+                    <div class="course-header">
+                        <span class="course-name">${name}</span>
+                        <span class="course-progress">${progress}%</span>
+                    </div>
+                    <div class="progress-bar" role="progressbar" aria-valuenow="${progress}" aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress-fill" style="width: ${progress}%"></div>
+                    </div>
+                    <div class="course-actions">
+                        <button class="edit-btn" onclick="DiaryManager.editCourseProgress('${courseId}')" aria-label="Изменить прогресс">✎</button>
+                        <button class="delete-btn" onclick="DiaryManager.deleteCourse('${courseId}')" aria-label="Удалить курс">✕</button>
+                    </div>
+                `;
+                
+                coursesList.appendChild(courseDiv);
+                
+                nameInput.value = '';
+                progressInput.value = '';
+                nameInput.focus();
+                
+                this.showNotification('Курс успешно добавлен!', 'success');
+                this.saveData();
+                this.updateStatistics();
+            },
+
+            // Редактирование прогресса курса
+            editCourseProgress(courseId) {
+                const course = document.getElementById(courseId);
+                const currentProgress = parseInt(course.querySelector('.course-progress').textContent);
+                const newProgress = prompt('Введите новый прогресс (0-100%):', currentProgress);
+                
+                if (newProgress !== null) {
+                    const progress = parseInt(newProgress);
+                    if (!isNaN(progress) && progress >= 0 && progress <= 100) {
+                        course.querySelector('.course-progress').textContent = progress + '%';
+                        course.querySelector('.progress-fill').style.width = progress + '%';
+                        course.querySelector('.progress-bar').setAttribute('aria-valuenow', progress);
+                        
+                        this.saveData();
+                        this.updateStatistics();
+                        this.showNotification('Прогресс обновлен!', 'success');
+                    } else {
+                        this.showNotification('Введите число от 0 до 100!', 'error');
+                    }
+                }
+            },
+
+            // Удаление курса
+            deleteCourse(courseId) {
+                const course = document.getElementById(courseId);
+                const courseName = course.querySelector('.course-name').textContent;
+                
+                if (confirm(`Удалить курс "${courseName}"?`)) {
+                    course.style.opacity = '0';
+                    course.style.transform = 'scale(0.8)';
+                    
+                    setTimeout(() => {
+                        course.remove();
+                        this.showNotification('Курс удален', 'info');
+                        this.saveData();
+                        this.updateStatistics();
+                    }, 300);
+                }
+            },
+
+            // Обновление статистики
+            updateStatistics() {
+                const entries = document.querySelectorAll('.entry-item');
+                const courses = document.querySelectorAll('.course');
+                
+                // Общее количество записей
+                document.getElementById('total-entries').textContent = entries.length;
+                
+                // Завершенные записи
+                const completedEntries = document.querySelectorAll('.entry-item.completed').length;
+                document.getElementById('completed-entries').textContent = completedEntries;
+                
+                // Количество курсов
+                document.getElementById('total-courses').textContent = courses.length;
+                
+                // Средний прогресс по курсам
+                let totalProgress = 0;
+                courses.forEach(course => {
+                    const progress = parseInt(course.querySelector('.course-progress').textContent);
+                    totalProgress += progress;
+                });
+                const avgProgress = courses.length > 0 ? Math.round(totalProgress / courses.length) : 0;
+                document.getElementById('avg-progress').textContent = avgProgress + '%';
+            },
+
+            // Получение иконки статуса
+            getStatusIcon(status) {
+                const icons = {
+                    'planned': '📅',
+                    'in-progress': '🔄', 
+                    'completed': '✅'
+                };
+                return icons[status] || '📝';
+            },
+
+            // Показать уведомление
+            showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                notification.className = `notification notification-${type}`;
+                notification.setAttribute('role', 'alert');
+                notification.setAttribute('aria-live', 'polite');
+                notification.textContent = message;
+                
+                Object.assign(notification.style, {
+                    position: 'fixed',
+                    top: '20px',
+                    right: '20px',
+                    padding: '1rem 1.5rem',
+                    background: type === 'error' ? '#ff4444' : type === 'success' ? '#00cc00' : '#3366cc',
+                    color: 'white',
+                    borderRadius: '4px',
+                    zIndex: '10000',
+                    fontWeight: 'bold',
+                    boxShadow: '0 2px 10px rgba(0,0,0,0.3)'
+                });
+                
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.style.opacity = '0';
+                    notification.style.transition = 'opacity 0.3s ease';
+                    setTimeout(() => notification.remove(), 300);
+                }, 3000);
+            },
+
+            // Сохранение всех данных
+            saveData() {
+                // Сохранение записей
+                const entries = [];
+                document.querySelectorAll('.entry-item').forEach(item => {
+                    entries.push({
+                        id: item.id,
+                        text: item.querySelector('.entry-text').textContent,
+                        status: Array.from(item.classList).find(cls => 
+                            ['planned', 'in-progress', 'completed'].includes(cls)
+                        )
+                    });
+                });
+                localStorage.setItem('diaryEntries', JSON.stringify(entries));
+                
+                // Сохранение курсов
+                const courses = [];
+                document.querySelectorAll('.course').forEach(course => {
+                    courses.push({
+                        id: course.id,
+                        name: course.querySelector('.course-name').textContent,
+                        progress: parseInt(course.querySelector('.course-progress').textContent)
+                    });
+                });
+                localStorage.setItem('diaryCourses', JSON.stringify(courses));
+            },
+
+            // Загрузка всех данных
+            loadData() {
+                this.loadEntries();
+                this.loadCourses();
+            },
+
+            // Загрузка записей
+            loadEntries() {
+                const savedEntries = localStorage.getItem('diaryEntries');
+                const progressList = document.getElementById('progress-list');
+                
+                if (savedEntries) {
+                    const entries = JSON.parse(savedEntries);
+                    entries.forEach(entry => {
+                        const li = document.createElement('li');
+                        li.className = `entry-item ${entry.status}`;
+                        li.id = entry.id;
+                        li.innerHTML = `
+                            <span class="entry-text">${entry.text}</span>
+                            <div class="entry-actions">
+                                <button class="status-btn" onclick="DiaryManager.toggleEntryStatus('${entry.id}')" aria-label="Изменить статус">
+                                    ${this.getStatusIcon(entry.status)}
+                                </button>
+                                <button class="delete-btn" onclick="DiaryManager.deleteEntry('${entry.id}')" aria-label="Удалить запись">✕</button>
+                            </div>
+                        `;
+                        progressList.appendChild(li);
+                    });
+                } else {
+                    this.loadDefaultEntries();
+                }
+            },
+
+            // Загрузка курсов
+            loadCourses() {
+                const savedCourses = localStorage.getItem('diaryCourses');
+                const coursesList = document.getElementById('courses-list');
+                
+                if (savedCourses) {
+                    const courses = JSON.parse(savedCourses);
+                    courses.forEach(course => {
+                        const courseDiv = document.createElement('div');
+                        courseDiv.className = 'course';
+                        courseDiv.id = course.id;
+                        courseDiv.innerHTML = `
+                            <div class="course-header">
+                                <span class="course-name">${course.name}</span>
+                                <span class="course-progress">${course.progress}%</span>
+                            </div>
+                            <div class="progress-bar" role="progressbar" aria-valuenow="${course.progress}" aria-valuemin="0" aria-valuemax="100">
+                                <div class="progress-fill" style="width: ${course.progress}%"></div>
+                            </div>
+                            <div class="course-actions">
+                                <button class="edit-btn" onclick="DiaryManager.editCourseProgress('${course.id}')" aria-label="Изменить прогресс">✎</button>
+                                <button class="delete-btn" onclick="DiaryManager.deleteCourse('${course.id}')" aria-label="Удалить курс">✕</button>
+                            </div>
+                        `;
+                        coursesList.appendChild(courseDiv);
+                    });
+                } else {
+                    this.loadDefaultCourses();
+                }
+            },
+
+            // Загрузка записей по умолчанию
+            loadDefaultEntries() {
+                const defaultEntries = [
+                    { text: "Изучение адаптивной верстки - завершено ✓", status: "completed" },
+                    { text: "Освоение JavaScript ES6+ - в процессе", status: "in-progress" },
+                    { text: "Практика с CSS Grid и Flexbox - завершено ✓", status: "completed" },
+                    { text: "Подготовка к экзамену по веб-разработке", status: "planned" }
+                ];
+                
+                const progressList = document.getElementById('progress-list');
+                defaultEntries.forEach((entry, index) => {
+                    const entryId = 'entry-default-' + index;
+                    const li = document.createElement('li');
+                    li.className = `entry-item ${entry.status}`;
+                    li.id = entryId;
+                    li.innerHTML = `
+                        <span class="entry-text">${entry.text}</span>
+                        <div class="entry-actions">
+                            <button class="status-btn" onclick="DiaryManager.toggleEntryStatus('${entryId}')" aria-label="Изменить статус">
+                                ${this.getStatusIcon(entry.status)}
+                            </button>
+                            <button class="delete-btn" onclick="DiaryManager.deleteEntry('${entryId}')" aria-label="Удалить запись">✕</button>
+                        </div>
+                    `;
+                    progressList.appendChild(li);
+                });
+                this.saveData();
+            },
+
+            // Загрузка курсов по умолчанию
+            loadDefaultCourses() {
+                const defaultCourses = [
+                    { name: "Фронтенд разработка", progress: 85 },
+                    { name: "JavaScript продвинутый", progress: 70 },
+                    { name: "React и современный JS", progress: 45 },
+                    { name: "Backend основы", progress: 30 }
+                ];
+                
+                const coursesList = document.getElementById('courses-list');
+                defaultCourses.forEach((course, index) => {
+                    const courseId = 'course-default-' + index;
+                    const courseDiv = document.createElement('div');
+                    courseDiv.className = 'course';
+                    courseDiv.id = courseId;
+                    courseDiv.innerHTML = `
+                        <div class="course-header">
+                            <span class="course-name">${course.name}</span>
+                            <span class="course-progress">${course.progress}%</span>
+                        </div>
+                        <div class="progress-bar" role="progressbar" aria-valuenow="${course.progress}" aria-valuemin="0" aria-valuemax="100">
+                            <div class="progress-fill" style="width: ${course.progress}%"></div>
+                        </div>
+                        <div class="course-actions">
+                            <button class="edit-btn" onclick="DiaryManager.editCourseProgress('${courseId}')" aria-label="Изменить прогресс">✎</button>
+                            <button class="delete-btn" onclick="DiaryManager.deleteCourse('${courseId}')" aria-label="Удалить курс">✕</button>
+                        </div>
+                    `;
+                    coursesList.appendChild(courseDiv);
+                });
+                this.saveData();
+            }
+        };
+
+        // Глобальные функции
         function toggleTheme() {
             const body = document.body;
             const themeBtn = document.querySelector('.theme-btn');
             const isDark = body.classList.toggle('dark-theme');
             
-            if (isDark) {
-                themeBtn.innerHTML = '☀️ Тема';
-                themeBtn.title = 'Включить светлую тему';
-                themeBtn.setAttribute('aria-label', 'Переключить на светлую тему');
-            } else {
-                themeBtn.innerHTML = '🌙 Тема';
-                themeBtn.title = 'Включить темную тему';
-                themeBtn.setAttribute('aria-label', 'Переключить на темную тему');
-            }
-            
+            themeBtn.innerHTML = isDark ? '☀️ Тема' : '🌙 Тема';
+            themeBtn.title = isDark ? 'Включить светлую тему' : 'Включить темную тему';
             localStorage.setItem('theme', isDark ? 'dark' : 'light');
         }
 
-        // Функция показа уведомления
-        function showNotification(message, type = 'info') {
-            const notification = document.createElement('div');
-            notification.className = `notification notification-${type}`;
-            notification.setAttribute('role', 'alert');
-            notification.setAttribute('aria-live', 'polite');
-            notification.textContent = message;
-            
-            Object.assign(notification.style, {
-                position: 'fixed',
-                top: '20px',
-                right: '20px',
-                padding: '1rem 1.5rem',
-                background: type === 'error' ? '#ff4444' : '#00cc00',
-                color: 'white',
-                borderRadius: '4px',
-                zIndex: '10000',
-                fontWeight: 'bold',
-                boxShadow: '0 2px 10px rgba(0,0,0,0.3)',
-                maxWidth: 'min(300px, 90vw)'
-            });
-            
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.style.opacity = '0';
-                notification.style.transition = 'opacity 0.3s ease';
-                setTimeout(() => {
-                    if (notification.parentNode) {
-                        notification.parentNode.removeChild(notification);
-                    }
-                }, 300);
-            }, 4000);
-        }
-
-        // Функция добавления новой записи
-        function addNewEntry(event) {
-            if (event) event.preventDefault();
-            
-            const textInput = document.getElementById('new-entry-text');
-            const statusSelect = document.getElementById('entry-status');
-            const progressList = document.getElementById('progress-list');
-            
-            const text = textInput.value.trim();
-            if (!text) {
-                showNotification('Введите текст записи!', 'error');
-                textInput.focus();
-                return;
-            }
-            
-            const newEntry = document.createElement('li');
-            newEntry.className = statusSelect.value;
-            newEntry.setAttribute('role', 'listitem');
-            newEntry.innerHTML = `
-                <span class="entry-text">${text}</span>
-                <button class="delete-btn" onclick="deleteEntry(this)" aria-label="Удалить запись">✕</button>
-            `;
-            
-            progressList.insertBefore(newEntry, progressList.firstChild);
-            textInput.value = '';
-            textInput.focus();
-            
-            showNotification('Запись успешно добавлена!', 'success');
-            saveEntriesToStorage();
-        }
-
-        // Функция удаления записи
-        function deleteEntry(button) {
-            const listItem = button.parentElement;
-            const entryText = listItem.querySelector('.entry-text').textContent;
-            
-            if (confirm(`Удалить запись "${entryText}"?`)) {
-                listItem.style.opacity = '0';
-                listItem.style.transition = 'opacity 0.3s ease';
-                
-                setTimeout(() => {
-                    listItem.remove();
-                    showNotification('Запись удалена', 'info');
-                    saveEntriesToStorage();
-                }, 300);
-            }
-        }
-
-        // Функция добавления нового курса
-        function addNewCourse(event) {
-            if (event) event.preventDefault();
-            
-            const nameInput = document.getElementById('new-course-name');
-            const progressInput = document.getElementById('new-course-progress');
-            const coursesList = document.getElementById('courses-list');
-            
-            const name = nameInput.value.trim();
-            const progress = parseInt(progressInput.value);
-            
-            if (!name || isNaN(progress)) {
-                showNotification('Заполните все поля корректно!', 'error');
-                return;
-            }
-            
-            if (progress < 0 || progress > 100) {
-                showNotification('Прогресс должен быть от 0 до 100%!', 'error');
-                progressInput.focus();
-                return;
-            }
-            
-            const courseId = 'course-' + Date.now();
-            const courseDiv = document.createElement('div');
-            courseDiv.className = 'course';
-            courseDiv.id = courseId;
-            courseDiv.innerHTML = `
-                <div class="course-info">
-                    <span class="course-name">${name}</span>
-                    <span class="course-progress">${progress}%</span>
-                </div>
-                <div class="progress-bar" role="progressbar" aria-valuenow="${progress}" aria-valuemin="0" aria-valuemax="100" aria-label="Прогресс курса ${name}">
-                    <div class="progress" style="width: ${progress}%"></div>
-                </div>
-                <button class="delete-btn course-delete" onclick="deleteCourse('${courseId}')" aria-label="Удалить курс ${name}">✕</button>
-            `;
-            
-            coursesList.appendChild(courseDiv);
-            
-            nameInput.value = '';
-            progressInput.value = '';
-            nameInput.focus();
-            
-            showNotification('Курс успешно добавлен!', 'success');
-            saveCoursesToStorage();
-        }
-
-        // Функция удаления курса
-        function deleteCourse(courseId) {
-            const courseDiv = document.getElementById(courseId);
-            const courseName = courseDiv.querySelector('.course-name').textContent;
-            
-            if (confirm(`Удалить курс "${courseName}"?`)) {
-                courseDiv.style.opacity = '0';
-                courseDiv.style.transition = 'opacity 0.3s ease';
-                
-                setTimeout(() => {
-                    courseDiv.remove();
-                    showNotification('Курс удален', 'info');
-                    saveCoursesToStorage();
-                }, 300);
-            }
-        }
-
-        // Сохранение записей в localStorage
-        function saveEntriesToStorage() {
-            const entries = [];
-            const listItems = document.querySelectorAll('#progress-list li');
-            
-            listItems.forEach(item => {
-                entries.push({
-                    text: item.querySelector('.entry-text').textContent,
-                    status: item.className
-                });
-            });
-            
-            localStorage.setItem('diaryEntries', JSON.stringify(entries));
-        }
-
-        // Сохранение курсов в localStorage
-        function saveCoursesToStorage() {
-            const courses = [];
-            const courseDivs = document.querySelectorAll('#courses-list .course');
-            
-            courseDivs.forEach(div => {
-                const name = div.querySelector('.course-name').textContent;
-                const progress = div.querySelector('.course-progress').textContent.replace('%', '');
-                courses.push({ 
-                    name, 
-                    progress: parseInt(progress),
-                    id: div.id
-                });
-            });
-            
-            localStorage.setItem('diaryCourses', JSON.stringify(courses));
-        }
-
-        // Загрузка данных при загрузке страницы
+        // Инициализация при загрузке
         document.addEventListener('DOMContentLoaded', function() {
-            // Загрузка темы
-            const savedTheme = localStorage.getItem('theme');
-            const themeBtn = document.querySelector('.theme-btn');
-            
-            if (savedTheme === 'dark') {
-                document.body.classList.add('dark-theme');
-                themeBtn.innerHTML = '☀️ Тема';
-                themeBtn.title = 'Включить светлую тему';
-                themeBtn.setAttribute('aria-label', 'Переключить на светлую тему');
-            }
-            
-            // Загрузка начальных данных
-            loadInitialData();
-            
-            // Обработчики форм
-            document.getElementById('add-entry-form').addEventListener('submit', addNewEntry);
-            document.getElementById('course-management-form').addEventListener('submit', addNewCourse);
-            
-            // Обработка Enter для добавления записей
-            document.getElementById('new-entry-text').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    addNewEntry();
-                }
-            });
-            
-            // Добавляем поддержку контейнерных запросов
-            if ('container' in document.documentElement.style) {
-                document.body.classList.add('supports-container-queries');
-            }
+            DiaryManager.init();
         });
-
-        // Загрузка начальных данных
-        function loadInitialData() {
-            // Загрузка записей
-            const savedEntries = localStorage.getItem('diaryEntries');
-            const progressList = document.getElementById('progress-list');
-            
-            if (savedEntries) {
-                const entries = JSON.parse(savedEntries);
-                entries.forEach(entry => {
-                    const li = document.createElement('li');
-                    li.className = entry.status;
-                    li.setAttribute('role', 'listitem');
-                    li.innerHTML = `
-                        <span class="entry-text">${entry.text}</span>
-                        <button class="delete-btn" onclick="deleteEntry(this)" aria-label="Удалить запись">✕</button>
-                    `;
-                    progressList.appendChild(li);
-                });
-            } else {
-                // Начальные данные по умолчанию
-                const defaultEntries = [
-                    { text: "10 окт - Верстка макета сайта ✓", status: "completed" },
-                    { text: "27 окт - JavaScript основы ✓", status: "completed" },
-                    { text: "8 ноя - Оптимизация производительности сайта in progress", status: "in-progress" },
-                    { text: "01 дек - Адаптивный дизайн in progress", status: "in-progress" }
-                ];
-                
-                defaultEntries.forEach(entry => {
-                    const li = document.createElement('li');
-                    li.className = entry.status;
-                    li.setAttribute('role', 'listitem');
-                    li.innerHTML = `
-                        <span class="entry-text">${entry.text}</span>
-                        <button class="delete-btn" onclick="deleteEntry(this)" aria-label="Удалить запись">✕</button>
-                    `;
-                    progressList.appendChild(li);
-                });
-                saveEntriesToStorage();
-            }
-            
-            // Загрузка курсов
-            const savedCourses = localStorage.getItem('diaryCourses');
-            const coursesList = document.getElementById('courses-list');
-            
-            if (savedCourses) {
-                const courses = JSON.parse(savedCourses);
-                courses.forEach(course => {
-                    const courseDiv = document.createElement('div');
-                    courseDiv.className = 'course';
-                    courseDiv.id = course.id || 'course-' + Date.now();
-                    courseDiv.innerHTML = `
-                        <div class="course-info">
-                            <span class="course-name">${course.name}</span>
-                            <span class="course-progress">${course.progress}%</span>
-                        </div>
-                        <div class="progress-bar" role="progressbar" aria-valuenow="${course.progress}" aria-valuemin="0" aria-valuemax="100" aria-label="Прогресс курса ${course.name}">
-                            <div class="progress" style="width: ${course.progress}%"></div>
-                        </div>
-                        <button class="delete-btn course-delete" onclick="deleteCourse('${courseDiv.id}')" aria-label="Удалить курс ${course.name}">✕</button>
-                    `;
-                    coursesList.appendChild(courseDiv);
-                });
-            } else {
-                // Начальные курсы по умолчанию
-                const defaultCourses = [
-                    { name: "Веб-разработка", progress: 90 },
-                    { name: "JavaScript", progress: 70 },
-                    { name: "React", progress: 50 }
-                ];
-                
-                defaultCourses.forEach(course => {
-                    const courseId = 'course-' + Date.now();
-                    const courseDiv = document.createElement('div');
-                    courseDiv.className = 'course';
-                    courseDiv.id = courseId;
-                    courseDiv.innerHTML = `
-                        <div class="course-info">
-                            <span class="course-name">${course.name}</span>
-                            <span class="course-progress">${course.progress}%</span>
-                        </div>
-                        <div class="progress-bar" role="progressbar" aria-valuenow="${course.progress}" aria-valuemin="0" aria-valuemax="100" aria-label="Прогресс курса ${course.name}">
-                            <div class="progress" style="width: ${course.progress}%"></div>
-                        </div>
-                        <button class="delete-btn course-delete" onclick="deleteCourse('${courseId}')" aria-label="Удалить курс ${course.name}">✕</button>
-                    `;
-                    coursesList.appendChild(courseDiv);
-                });
-                saveCoursesToStorage();
-            }
-        }
-
-        // Динамическая загрузка стилей для улучшений
-        const style = document.createElement('style');
-        style.textContent = `
-            .visually-hidden {
-                position: absolute !important;
-                width: 1px !important;
-                height: 1px !important;
-                padding: 0 !important;
-                margin: -1px !important;
-                overflow: hidden !important;
-                clip: rect(0, 0, 0, 0) !important;
-                white-space: nowrap !important;
-                border: 0 !important;
-            }
-            
-            .form-row {
-                display: grid;
-                grid-template-columns: 1fr;
-                gap: 1rem;
-                margin-bottom: 1rem;
-            }
-            
-            @media (min-width: 480px) {
-                .form-row {
-                    grid-template-columns: 1fr auto;
-                }
-            }
-            
-            .form-select {
-                width: 100%;
-                padding: 0.5rem;
-                border: 1px inset #ccc;
-                background: #ffffff;
-                border-radius: 2px;
-                font-size: 0.9rem;
-            }
-            
-            .dark-theme .form-select {
-                background: #3a3a3a;
-                border-color: #666;
-                color: #e0e0e0;
-            }
-            
-            .course {
-                display: grid;
-                grid-template-columns: 1fr auto;
-                gap: 0.75rem;
-                align-items: center;
-                padding: 0.75rem;
-                background: #f9f9f9;
-                border: 1px solid #ddd;
-                border-radius: 4px;
-                margin-bottom: 0.75rem;
-                position: relative;
-            }
-            
-            .dark-theme .course {
-                background: #3a3a3a;
-                border-color: #555;
-            }
-            
-            .course-info {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                grid-column: 1 / -1;
-            }
-            
-            .course-name {
-                font-weight: bold;
-                color: var(--color-primary, #3366cc);
-            }
-            
-            .course-progress {
-                font-weight: bold;
-                color: #666;
-            }
-            
-            .progress-bar {
-                grid-column: 1 / -1;
-                height: 15px;
-                background-color: #e0e0e0;
-                border: 1px inset #ccc;
-                overflow: hidden;
-                border-radius: 2px;
-            }
-            
-            .dark-theme .progress-bar {
-                background-color: #333;
-                border-color: #555;
-            }
-            
-            .course-delete {
-                position: absolute;
-                top: 0.5rem;
-                right: 0.5rem;
-                background: #ff4444;
-                border: 1px outset #cc0000;
-                padding: 0.25rem 0.5rem;
-                font-size: 0.8rem;
-            }
-            
-            .btn-secondary {
-                background: linear-gradient(to bottom, #6699ff, var(--color-primary));
-                color: white;
-                border-color: var(--color-primary);
-            }
-            
-            .btn-secondary:hover {
-                background: linear-gradient(to bottom, var(--color-primary), #2244aa);
-            }
-            
-            /* Анимации */
-            .progress-list li,
-            .course {
-                transition: all 0.3s ease;
-            }
-            
-            /* Контейнерные запросы для адаптивности */
-            @supports (container-type: inline-size) {
-                .diary-content {
-                    container-type: inline-size;
-                }
-                
-                @container (min-width: 600px) {
-                    .form-row {
-                        grid-template-columns: 1fr auto;
-                    }
-                }
-            }
-        `;
-        document.head.appendChild(style);
     </script>
 </body>
 </html>

@@ -12,7 +12,10 @@
             <div class="logo">
                 <a href="index.html" class="logo-link">
                     <div class="logo-icon">
-                        <img src="images/icons/logo.ico" alt="Логотип" width="32" height="32" loading="lazy">
+                        <!-- Техника 4: Retina display поддержка -->
+                        <img src="images/icons/logo@1x.ico" 
+                             srcset="images/icons/logo@1x.ico 1x, images/icons/logo@2x.ico 2x"
+                             alt="Логотип" width="32" height="32" loading="lazy">
                     </div>
                     <h1>Малямов Семён</h1>
                 </a>
@@ -42,12 +45,20 @@
                     </div>
                     <div class="hero-photo">
                         <figure class="hero-image">
-                            <img class="hero-photo-img" 
-                                src="images/grusha.jpg" 
-                                width="200" height="200" 
-                                alt="Портрет студента" 
-                                loading="eager"
-                                decoding="async">
+                            <!-- Техника 2: Picture element с форматами -->
+                            <picture>
+                                <!-- WebP для современных браузеров -->
+                                <source srcset="images/portrait.webp" type="image/webp">
+                                <!-- JPEG для старых браузеров -->
+                                <source srcset="images/portrait.jpg" type="image/jpeg">
+                                <!-- Техника 1: Базовое адаптивное изображение -->
+                                <img class="hero-photo-img responsive-image" 
+                                    src="images/portrait.jpg" 
+                                    width="200" height="200" 
+                                    alt="Портрет студента" 
+                                    loading="eager"
+                                    decoding="async">
+                            </picture>
                         </figure>
                     </div>
                 </div>
@@ -93,7 +104,19 @@
                     <a href="pages/projects.html" class="project-link">
                         <article class="project-card">
                             <div class="project-image">
-                                <img src="images/site.png" alt="Мой сайт" width="300" height="200" loading="lazy">
+                                <!-- Техника 3: Разные изображения для разных экранов -->
+                                <picture>
+                                    <!-- Большое изображение для десктопов -->
+                                    <source media="(min-width: 1200px)" srcset="images/site-desktop.jpg">
+                                    <!-- Среднее для планшетов -->
+                                    <source media="(min-width: 768px)" srcset="images/site-tablet.jpg">
+                                    <!-- Маленькое для мобильных -->
+                                    <img src="images/site-mobile.jpg" 
+                                         alt="Мой сайт" 
+                                         width="300" height="200" 
+                                         loading="lazy"
+                                         class="responsive-image">
+                                </picture>
                             </div>
                             <div class="project-content">
                                 <h3 class="project-title">Мой сайт</h3>
@@ -104,7 +127,15 @@
                     <a href="pages/projects.html" class="project-link">
                         <article class="project-card">
                             <div class="project-image">
-                                <img src="images/train.png" alt="Менеджер питания" width="300" height="200" loading="lazy">
+                                <picture>
+                                    <source media="(min-width: 1200px)" srcset="images/train-desktop.jpg">
+                                    <source media="(min-width: 768px)" srcset="images/train-tablet.jpg">
+                                    <img src="images/train-mobile.jpg" 
+                                         alt="Менеджер питания" 
+                                         width="300" height="200" 
+                                         loading="lazy"
+                                         class="responsive-image">
+                                </picture>
                             </div>
                             <div class="project-content">
                                 <h3 class="project-title">Менеджер питания и тренировок</h3>
@@ -115,7 +146,15 @@
                     <a href="pages/projects.html" class="project-link">
                         <article class="project-card">
                             <div class="project-image">
-                                <img src="images/market.png" alt="Онлайн магазин" width="300" height="200" loading="lazy">
+                                <picture>
+                                    <source media="(min-width: 1200px)" srcset="images/market-desktop.jpg">
+                                    <source media="(min-width: 768px)" srcset="images/market-tablet.jpg">
+                                    <img src="images/market-mobile.jpg" 
+                                         alt="Онлайн магазин" 
+                                         width="300" height="200" 
+                                         loading="lazy"
+                                         class="responsive-image">
+                                </picture>
                             </div>
                             <div class="project-content">
                                 <h3 class="project-title">Онлайн магазин</h3>
@@ -124,7 +163,7 @@
                         </article>
                     </a>
                 </div>
-            </section>
+            </section>            
         </main>
 
         <footer class="footer">
@@ -159,7 +198,6 @@
                 themeBtn.title = 'Включить светлую тему';
             }
             
-            // Прогрессивное улучшение для контейнерных запросов
             if ('container' in document.documentElement.style) {
                 document.body.classList.add('supports-container-queries');
             }
