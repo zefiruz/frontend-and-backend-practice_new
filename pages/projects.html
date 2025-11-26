@@ -62,7 +62,6 @@
                              onclick="openModal('modal1')" 
                              onkeydown="handleProjectKeydown(event, 'modal1')">
                         <div class="project-image">
-                            <!-- Адаптивное изображение с разными версиями -->
                             <picture>
                                 <source media="(min-width: 1200px)" srcset="../images/site-desktop.jpg">
                                 <source media="(min-width: 768px)" srcset="../images/site-tablet.jpg">
@@ -344,21 +343,17 @@
     </div>
 
     <script>
-        // Система управления проектами
         const ProjectManager = {
-            // Фильтрация проектов
             filterProjects(filter) {
                 const projects = document.querySelectorAll('.project-card');
                 const filterButtons = document.querySelectorAll('.filter-btn');
                 
-                // Обновляем активные кнопки
                 filterButtons.forEach(btn => {
                     const isActive = btn.dataset.filter === filter;
                     btn.classList.toggle('active', isActive);
                     btn.setAttribute('aria-pressed', isActive);
                 });
                 
-                // Фильтруем проекты с анимацией
                 projects.forEach((project, index) => {
                     const categories = project.dataset.categories.split(' ');
                     const shouldShow = filter === 'all' || categories.includes(filter);
@@ -379,7 +374,6 @@
                 });
             },
 
-            // Открытие модального окна
             openModal(modalId) {
                 const modal = document.getElementById(modalId);
                 if (!modal) return;
@@ -388,18 +382,15 @@
                 modal.setAttribute('aria-hidden', 'false');
                 document.body.style.overflow = 'hidden';
                 
-                // Фокус на модальном окне
                 const firstFocusable = modal.querySelector('button, a');
                 if (firstFocusable) firstFocusable.focus();
                 
-                // Добавляем обработчик Escape
                 this.escapeHandler = (e) => {
                     if (e.key === 'Escape') this.closeModal(modalId);
                 };
                 document.addEventListener('keydown', this.escapeHandler);
             },
 
-            // Закрытие модального окна
             closeModal(modalId) {
                 const modal = document.getElementById(modalId);
                 if (!modal) return;
@@ -408,12 +399,10 @@
                 modal.setAttribute('aria-hidden', 'true');
                 document.body.style.overflow = '';
                 
-                // Удаляем обработчик Escape
                 document.removeEventListener('keydown', this.escapeHandler);
             }
         };
 
-        // Глобальные функции для HTML атрибутов
         function openModal(modalId) {
             ProjectManager.openModal(modalId);
         }
@@ -440,7 +429,6 @@
         }
 
         function showDownloadNotification() {
-            // Создаем уведомление
             const notification = document.createElement('div');
             notification.className = 'download-notification';
             notification.innerHTML = `
@@ -452,7 +440,6 @@
             
             document.body.appendChild(notification);
             
-            // Автоматическое удаление через 5 секунд
             setTimeout(() => {
                 if (notification.parentElement) {
                     notification.remove();
@@ -460,34 +447,28 @@
             }, 5000);
         }
 
-        // Инициализация при загрузке страницы
         document.addEventListener('DOMContentLoaded', function() {
-            // Восстанавливаем тему
             const savedTheme = localStorage.getItem('theme');
             if (savedTheme === 'dark') {
                 document.body.classList.add('dark-theme');
                 document.querySelector('.theme-btn').innerHTML = '☀️ Тема';
             }
             
-            // Инициализация фильтров
             document.querySelectorAll('.filter-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     ProjectManager.filterProjects(btn.dataset.filter);
                 });
             });
             
-            // Закрытие модалок по клику вне контента
             document.addEventListener('click', (e) => {
                 if (e.target.classList.contains('modal')) {
                     ProjectManager.closeModal(e.target.id);
                 }
             });
             
-            // Анимация статистики
             animateStatistics();
         });
 
-        // Анимация счетчиков статистики
         function animateStatistics() {
             const counters = document.querySelectorAll('.stat-number');
             

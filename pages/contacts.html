@@ -23,7 +23,6 @@
             </div>
             <nav class="nav" aria-label="Основная навигация">
                 <ul class="nav-list">
-                    <!-- Убраны ARIA роли меню, так как это обычная навигация -->
                     <li>
                         <a href="../index.html" class="nav-link">Главная</a>
                     </li>
@@ -56,9 +55,7 @@
                     <form class="contact-form" id="contactForm" aria-labelledby="contact-form-title" novalidate>
                         <h3 id="contact-form-title" class="form-title">Напишите мне</h3>
                         
-                        <div class="form-fieldset">
-                            <!-- Убран fieldset/legend, так как это простая форма -->
-                            
+                        <div class="form-fieldset">                            
                             <div class="form-group">
                                 <label for="name" class="form-label">
                                     Имя <span class="required-asterisk" aria-hidden="true">*</span>
@@ -469,7 +466,6 @@
                 
                 document.body.appendChild(notification);
                 
-                // Добавляем обработчик для кнопки закрытия
                 const closeBtn = notification.querySelector('.notification-close');
                 if (closeBtn) {
                     closeBtn.addEventListener('click', () => {

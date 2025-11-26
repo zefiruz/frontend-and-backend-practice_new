@@ -1,17 +1,16 @@
-/* СТИЛИ В ДУХЕ 2000-Х С СОВРЕМЕННОЙ АДАПТИВНОСТЬЮ И ДОСТУПНОСТЬЮ */
+/* СТИЛИ В ДУХЕ 2000-Х */
 
 :root {
     color-scheme: light dark;
     
-    /* Обновленная цветовая схема с лучшим контрастом */
-    --color-primary: #1a4b8c;        /* Более темный синий для лучшего контраста */
-    --color-secondary: #cc4400;      /* Более темный оранжевый */
-    --color-accent: #990099;         /* Более темный фиолетовый */
+    --color-primary: #1a4b8c;
+    --color-secondary: #cc4400;
+    --color-accent: #990099;
     --color-background: #e6e6fa;
     --color-surface: #ffffff;
-    --color-text: #222222;           /* Более темный текст */
-    --color-border: #666666;         /* Более контрастная граница */
-    --color-text-light: #444444;     /* Для вторичного текста */
+    --color-text: #222222;
+    --color-border: #666666;
+    --color-text-light: #444444;
     
     /* Обновленные градиенты с лучшим контрастом */
     --gradient-primary: linear-gradient(to bottom, #3a6bbb, var(--color-primary));
@@ -150,7 +149,7 @@ body {
     background: #c0c0c0;
     border: 2px outset #c0c0c0;
     text-decoration: none;
-    color: #222222; /* Фиксированный темный цвет для контраста */
+    color: #222222;
     font-weight: bold;
     font-size: clamp(0.8rem, 2vw, 0.9rem);
     cursor: pointer;
@@ -163,7 +162,7 @@ body {
 .nav-link[aria-current="page"] {
     background: #d4d4d4;
     border: 2px inset #c0c0c0;
-    color: #1a4b8c; /* Фиксированный цвет для контраста */
+    color: #1a4b8c; 
 }
 
 /* === ОСНОВНОЙ КОНТЕНТ === */
@@ -282,7 +281,7 @@ body {
 .btn-secondary {
     background: var(--gradient-accent);
     border-color: var(--color-secondary);
-    color: #222222; /* Фиксированный темный цвет для контраста */
+    color: #222222; 
 }
 
 .btn-secondary:hover {
@@ -310,7 +309,7 @@ body {
     background: white;
     font-family: inherit;
     font-size: 1rem;
-    color: #222222; /* Фиксированный цвет текста */
+    color: #222222; 
 }
 
 .form-input:focus,
@@ -390,7 +389,7 @@ body {
 }
 
 .project-description {
-    color: #444444; /* Улучшенный контраст */
+    color: #444444;
     font-size: 0.9rem;
     line-height: 1.4;
     flex: 1;
@@ -412,7 +411,7 @@ body {
     font-size: 0.9rem;
     min-height: 44px;
     min-width: 44px;
-    color: #222222; /* Фиксированный цвет для контраста */
+    color: #222222; 
 }
 
 .filter-btn.active,
@@ -481,17 +480,17 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: #222222; /* Фиксированный цвет для контраста */
+    color: #222222; 
 }
 
 .entry-item.completed {
     background: linear-gradient(to right, #ccffcc, #e0ffe0);
-    border-color: #008800; /* Более темный зеленый */
+    border-color: #008800; 
 }
 
 .entry-item.in-progress {
     background: linear-gradient(to right, #ffffcc, #ffffe0);
-    border-color: #cc8800; /* Более темный желтый */
+    border-color: #cc8800; 
 }
 
 .entry-item.planned {
@@ -531,7 +530,7 @@ body {
     cursor: pointer;
     min-width: 30px;
     min-height: 30px;
-    color: #222222; /* Фиксированный цвет для контраста */
+    color: #222222; 
 }
 
 /* === СТАТИСТИКА === */
@@ -561,7 +560,7 @@ body {
 }
 
 .stat-label {
-    color: #444444; /* Улучшенный контраст */
+    color: #444444; 
     font-size: 0.9rem;
 }
 
@@ -586,7 +585,7 @@ body {
     padding: var(--space-md);
     background: white;
     border: 1px solid var(--color-border);
-    color: #222222; /* Фиксированный темный цвет для контраста */
+    color: #222222; 
 }
 
 .contact-icon {
@@ -606,19 +605,19 @@ body {
 }
 
 .contact-link {
-    color: #cc4400; /* Фиксированный темный оранжевый */
+    color: #cc4400; 
     text-decoration: none;
-    font-weight: 600; /* Полужирный для лучшей видимости */
+    font-weight: 600; 
 }
 
 .contact-link:hover {
-    color: #993300; /* Еще темнее при наведении */
+    color: #993300; 
     text-decoration: underline;
 }
 
 .contact-description {
     font-size: 0.8rem;
-    color: #555555; /* Улучшенный контраст */
+    color: #555555; 
     margin-top: 2px;
 }
 
@@ -665,29 +664,29 @@ body {
     padding: var(--space-md);
     text-align: center;
     margin-top: auto;
-    color: #222222; /* Фиксированный темный цвет для контраста */
+    color: #222222; 
 }
 
 .footer-link {
-    color: #1a4b8c; /* Фиксированный темный синий */
+    color: #1a4b8c; 
     text-decoration: none;
-    font-weight: 600; /* Полужирный для лучшей видимости */
+    font-weight: 600; 
 }
 
 .footer-link:hover {
-    color: #cc4400; /* Контрастный цвет при наведении */
+    color: #cc4400; 
     text-decoration: underline;
 }
 
-/* === ТЕМНАЯ ТЕМА С УЛУЧШЕННЫМ КОНТРАСТОМ === */
+/* === ТЕМНАЯ ТЕМА === */
 body.dark-theme {
     background-color: #1a1a1a;
-    color: #e0e0e0; /* Более светлый текст */
+    color: #e0e0e0; 
 }
 
 body.dark-theme .container {
     background-color: #2a2a2a;
-    border-color: #888888; /* Более светлая граница */
+    border-color: #888888; 
 }
 
 body.dark-theme .header {
@@ -702,14 +701,14 @@ body.dark-theme .nav {
 body.dark-theme .nav-link {
     background: #505050;
     border-color: #666666 #222222 #222222 #666666;
-    color: #e0e0e0; /* Светлый текст */
+    color: #e0e0e0; 
 }
 
 body.dark-theme .nav-link:hover,
 body.dark-theme .nav-link.active {
     background: #606060;
     border-color: #222222 #666666 #666666 #222222;
-    color: #7ba7e0; /* Светлый синий */
+    color: #7ba7e0; 
 }
 
 body.dark-theme .main {
@@ -718,7 +717,7 @@ body.dark-theme .main {
 }
 
 body.dark-theme .section-title {
-    color: #7ba7e0; /* Более светлый синий */
+    color: #7ba7e0; 
     border-bottom-color: #7ba7e0;
 }
 
@@ -726,7 +725,7 @@ body.dark-theme .hero-description,
 body.dark-theme .project-description,
 body.dark-theme .contact-description,
 body.dark-theme .stat-label {
-    color: #cccccc; /* Более светлый серый */
+    color: #cccccc; 
 }
 
 body.dark-theme .contact-item {
@@ -736,7 +735,7 @@ body.dark-theme .contact-item {
 }
 
 body.dark-theme .contact-link {
-    color: #ff8844; /* Светлый оранжевый */
+    color: #ff8844; 
 }
 
 body.dark-theme .contact-link:hover {
@@ -750,14 +749,13 @@ body.dark-theme .footer {
 }
 
 body.dark-theme .footer-link {
-    color: #7ba7e0; /* Светлый синий */
+    color: #7ba7e0; 
 }
 
 body.dark-theme .footer-link:hover {
-    color: #ff8844; /* Светлый оранжевый */
+    color: #ff8844; 
 }
 
-/* Остальные стили остаются без изменений... */
 /* === МОДАЛЬНЫЕ ОКНА === */
 .modal {
     display: none;
