@@ -22,26 +22,26 @@
                 </a>
             </div>
             <nav class="nav" aria-label="Основная навигация">
-                <ul class="nav-list" role="menubar">
-                    <li role="none">
-                        <a href="../index.html" class="nav-link" role="menuitem">Главная</a>
+                <ul class="nav-list">
+                    <!-- Убраны ARIA роли меню, так как это обычная навигация -->
+                    <li>
+                        <a href="../index.html" class="nav-link">Главная</a>
                     </li>
-                    <li role="none">
-                        <a href="projects.html" class="nav-link" role="menuitem">Проекты</a>
+                    <li>
+                        <a href="projects.html" class="nav-link">Проекты</a>
                     </li>
-                    <li role="none">
-                        <a href="diary.html" class="nav-link" role="menuitem">Дневник</a>
+                    <li>
+                        <a href="diary.html" class="nav-link">Дневник</a>
                     </li>
-                    <li role="none">
-                        <a href="contacts.html" class="nav-link active" role="menuitem" aria-current="page">Контакты</a>
+                    <li>
+                        <a href="contacts.html" class="nav-link active" aria-current="page">Контакты</a>
                     </li>
-                    <li role="none">
+                    <li>
                         <button onclick="toggleTheme()" 
                                 class="theme-btn nav-link" 
-                                role="menuitem"
                                 aria-label="Переключить цветовую тему"
                                 title="Переключить тему">
-                            🌙 <span class="sr-only">Переключить </span>Тема
+                            🌙 Тема
                         </button>
                     </li>
                 </ul>
@@ -56,8 +56,8 @@
                     <form class="contact-form" id="contactForm" aria-labelledby="contact-form-title" novalidate>
                         <h3 id="contact-form-title" class="form-title">Напишите мне</h3>
                         
-                        <fieldset class="form-fieldset">
-                            <legend class="sr-only">Контактная информация</legend>
+                        <div class="form-fieldset">
+                            <!-- Убран fieldset/legend, так как это простая форма -->
                             
                             <div class="form-group">
                                 <label for="name" class="form-label">
@@ -112,7 +112,7 @@
                                 ></textarea>
                                 <div id="message-hint" class="form-hint">Опишите подробно ваш вопрос или предложение</div>
                             </div>
-                        </fieldset>
+                        </div>
                         
                         <div class="form-actions">
                             <button type="submit" class="btn btn-primary btn-submit">
@@ -245,21 +245,25 @@
                 
                 if (savedTheme === 'dark') {
                     document.body.classList.add('dark-theme');
-                    themeBtn.innerHTML = '☀️ <span class="sr-only">Переключить </span>Тема';
-                    themeBtn.title = 'Включить светлую тему';
+                    themeBtn.innerHTML = '☀️ Тема';
+                    themeBtn.setAttribute('aria-label', 'Переключить на светлую тему');
+                } else {
+                    themeBtn.setAttribute('aria-label', 'Переключить на темную тему');
                 }
             },
 
             setupForm() {
                 const form = document.getElementById('contactForm');
-                form.addEventListener('submit', (e) => this.handleSubmit(e));
-                
-                this.setupRealTimeValidation();
-                
-                form.addEventListener('reset', () => {
-                    this.clearAllErrors();
-                    this.showNotification('Форма очищена', 'info');
-                });
+                if (form) {
+                    form.addEventListener('submit', (e) => this.handleSubmit(e));
+                    
+                    this.setupRealTimeValidation();
+                    
+                    form.addEventListener('reset', () => {
+                        this.clearAllErrors();
+                        this.showNotification('Форма очищена', 'info');
+                    });
+                }
             },
 
             handleSubmit(e) {
@@ -313,7 +317,10 @@
 
             showFieldError(fieldName, message) {
                 const field = document.getElementById(fieldName);
+                if (!field) return;
+                
                 const formGroup = field.closest('.form-group');
+                if (!formGroup) return;
                 
                 const existingError = formGroup.querySelector('.field-error');
                 if (existingError) existingError.remove();
@@ -323,7 +330,6 @@
                 errorElement.id = `${fieldName}-error`;
                 errorElement.textContent = message;
                 errorElement.setAttribute('role', 'alert');
-                errorElement.setAttribute('aria-live', 'polite');
                 
                 formGroup.appendChild(errorElement);
                 field.setAttribute('aria-invalid', 'true');
@@ -349,6 +355,8 @@
                     
                     field.addEventListener('input', () => {
                         const formGroup = field.closest('.form-group');
+                        if (!formGroup) return;
+                        
                         const error = formGroup.querySelector('.field-error');
                         if (error && field.value.trim()) {
                             const fieldId = field.id;
@@ -378,11 +386,12 @@
 
             showLoadingState() {
                 const submitBtn = document.querySelector('.btn-submit');
+                if (!submitBtn) return;
+                
                 const originalText = submitBtn.innerHTML;
                 
                 submitBtn.innerHTML = '⏳ Отправка...';
                 submitBtn.disabled = true;
-                submitBtn.setAttribute('aria-disabled', 'true');
                 
                 this.announceToScreenReader('Отправка сообщения...');
             },
@@ -391,25 +400,35 @@
                 setTimeout(() => {
                     this.showNotification('✅ Сообщение отправлено! Спасибо за ваше обращение.', 'success');
                     this.announceToScreenReader('Сообщение успешно отправлено. Спасибо за ваше обращение.');
-                    document.getElementById('contactForm').reset();
-                    document.getElementById('name').focus();
+                    
+                    const form = document.getElementById('contactForm');
+                    if (form) {
+                        form.reset();
+                    }
+                    
+                    const nameField = document.getElementById('name');
+                    if (nameField) {
+                        nameField.focus();
+                    }
                     
                     const submitBtn = document.querySelector('.btn-submit');
-                    submitBtn.innerHTML = '📨 Отправить сообщение';
-                    submitBtn.disabled = false;
-                    submitBtn.removeAttribute('aria-disabled');
+                    if (submitBtn) {
+                        submitBtn.innerHTML = '📨 Отправить сообщение';
+                        submitBtn.disabled = false;
+                    }
                 }, 2000);
             },
 
             setupAccessibility() {
                 const form = document.getElementById('contactForm');
-                
-                form.addEventListener('keydown', (e) => {
-                    if (e.key === 'Escape') {
-                        e.target.blur();
-                        this.announceToScreenReader('Выход из поля ввода');
-                    }
-                });
+                if (form) {
+                    form.addEventListener('keydown', (e) => {
+                        if (e.key === 'Escape') {
+                            e.target.blur();
+                            this.announceToScreenReader('Выход из поля ввода');
+                        }
+                    });
+                }
             },
 
             announceToScreenReader(message) {
@@ -421,33 +440,56 @@
                 document.body.appendChild(announcement);
                 
                 setTimeout(() => {
-                    announcement.remove();
+                    if (announcement.parentElement) {
+                        announcement.remove();
+                    }
                 }, 3000);
             },
 
             showNotification(message, type = 'info') {
-                document.querySelectorAll('.contact-notification').forEach(notification => notification.remove());
+                // Удаляем существующие уведомления
+                document.querySelectorAll('.contact-notification').forEach(notification => {
+                    if (notification.parentElement) {
+                        notification.remove();
+                    }
+                });
                 
                 const notification = document.createElement('div');
                 notification.className = `contact-notification notification-${type}`;
                 notification.setAttribute('role', type === 'error' ? 'alert' : 'status');
                 notification.setAttribute('aria-live', 'polite');
-                notification.setAttribute('aria-atomic', 'true');
+                
                 notification.innerHTML = `
                     <div class="notification-content">
                         <span class="notification-message">${message}</span>
                         <button class="notification-close" 
-                                onclick="this.parentElement.parentElement.remove()" 
                                 aria-label="Закрыть уведомление">×</button>
                     </div>
                 `;
                 
                 document.body.appendChild(notification);
                 
+                // Добавляем обработчик для кнопки закрытия
+                const closeBtn = notification.querySelector('.notification-close');
+                if (closeBtn) {
+                    closeBtn.addEventListener('click', () => {
+                        notification.style.opacity = '0';
+                        setTimeout(() => {
+                            if (notification.parentElement) {
+                                notification.remove();
+                            }
+                        }, 300);
+                    });
+                }
+                
                 setTimeout(() => {
                     if (notification.parentElement) {
                         notification.style.opacity = '0';
-                        setTimeout(() => notification.remove(), 300);
+                        setTimeout(() => {
+                            if (notification.parentElement) {
+                                notification.remove();
+                            }
+                        }, 300);
                     }
                 }, 5000);
             }
@@ -456,10 +498,12 @@
         function toggleTheme() {
             const body = document.body;
             const themeBtn = document.querySelector('.theme-btn');
+            if (!themeBtn) return;
+            
             const isDark = body.classList.toggle('dark-theme');
             
-            themeBtn.innerHTML = isDark ? '☀️ <span class="sr-only">Переключить </span>Тема' : '🌙 <span class="sr-only">Переключить </span>Тема';
-            themeBtn.title = isDark ? 'Включить светлую тему' : 'Включить темную тему';
+            themeBtn.innerHTML = isDark ? '☀️ Тема' : '🌙 Тема';
+            themeBtn.setAttribute('aria-label', isDark ? 'Переключить на светлую тему' : 'Переключить на темную тему');
             localStorage.setItem('theme', isDark ? 'dark' : 'light');
             
             ContactManager.announceToScreenReader(isDark ? 'Темная тема включена' : 'Светлая тема включена');
