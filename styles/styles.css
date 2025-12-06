@@ -885,20 +885,35 @@ body.dark-theme .footer-link:hover {
     border: 0;
 }
 
+/* Стили для ссылки-пропуска */
 .skip-link {
     position: absolute;
     top: -40px;
-    left: 6px;
-    background: #000;
+    left: 0;
+    background: #007acc;
     color: white;
-    padding: 8px;
+    padding: 8px 16px;
     text-decoration: none;
-    z-index: 100;
-    transition: top 0.3s;
+    font-weight: 500;
+    border-radius: 0 0 4px 0;
+    z-index: 1000;
+    transition: top 0.3s ease;
 }
 
 .skip-link:focus {
-    top: 6px;
+    top: 0;
+    outline: 2px solid #005a99;
+    outline-offset: 2px;
+}
+
+/* Для темной темы */
+.dark-theme .skip-link {
+    background: #1a73e8;
+    color: #ffffff;
+}
+
+.dark-theme .skip-link:focus {
+    outline-color: #8ab4f8;
 }
 
 /* Состояния фокуса */
